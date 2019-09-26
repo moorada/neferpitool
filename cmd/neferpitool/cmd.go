@@ -9,6 +9,7 @@ import (
 	"github.com/briandowns/spinner"
 
 	"github.com/cheggaaa/pb"
+
 	"github.com/moorada/neferpitool/pkg/configuration"
 	"github.com/moorada/neferpitool/pkg/scanner"
 
@@ -57,13 +58,13 @@ func CmdRoot() {
 			"-td [typo.example]						Manage one typodomain\n" +
 			"-bg    								Active monitor in background\n" +
 			"-pd [domain.example domain2.example]	Check if domains are present\n" +
+			"-mk 									Make config file\n" +
 			"-se 									Show errors about query")
 		return
 	}
 	if *logs {
 		log.ActiveDebugLog()
 	}
-
 
 	if *makeConfig {
 		configuration.MakeConfigFile()

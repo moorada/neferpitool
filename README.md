@@ -1,29 +1,8 @@
 # neferpitool
-Domain name permutation engine for detecting typo squatting and monitoring domains
+The tool have the function of storing and showing information about the domains and typo domains of interest. It will also be able to identify, monitor and notify changes about typo domains via email.
 
-
-
-## Install
-```
-go get github.com/jackal00/neferpitool
 
 ```
+go get github.com/moorada/neferpitool
 
-## Usage
-in cmd/domainmonitoring path
-```
-// add a new domain in the monitor-zone
-go run main.go example.domain
-go run main.go -debug -log=logx.txt google.com
-// manage the monitor-zone
-go run main.go
-go run main.go -debug -log=logx.txt
-```
-
-
-## Dependencies
-
-```
-go get -u github.com/golang/dep/cmd/dep
-dep ensure -v
 ```
