@@ -120,13 +120,11 @@ func checkChangesOfAll() {
 
 func background() {
 	timeToSleepBackground := time.Duration(configuration.GetConf().HOURSLEEPBACKGROUNDMONITORING) * time.Hour
-	log.Info("Monotoring...")
 	mds := db.GetMainDomainListFromDB()
 	if len(mds) != 0 {
 		for {
 			log.Info("Monotoring...")
 			backgroundWork()
-
 			s := spinner.New(spinner.CharSets[26], 200*time.Millisecond) // Build our new spinner
 			s.Prefix = "Sleeping "
 			s.Start()

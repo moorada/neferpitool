@@ -85,9 +85,9 @@ func CheckDNS(d string) (result int, info Dns, err error, duration time.Duration
 	}
 
 	var errString string
-	for _, e := range errorsMap {
+	for k, e := range errorsMap {
 		if e != nil {
-			errString += e.Error() + " | "
+			errString += k + ": " + e.Error() + " | "
 		}
 	}
 	if errString != "" {

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"time"
 
@@ -47,20 +46,10 @@ func CmdRoot() {
 	singleTd := flag.String("td", "", "Manage one typodomain")
 	bg := flag.Bool("bg", false, "Active monitoring in background")
 	pd := flag.Bool("pd", false, "Check if domains are present")
-	h := flag.Bool("h", false, "Guide")
 	makeConfig := flag.Bool("mc", false, "Make config file")
+
 	flag.Parse()
 
-	if *h {
-		fmt.Println(" This tool which allows to identify abuses of domain names and monitor typodomains\n" +
-			"Flags:\n" +
-			"-logs									Active logs on file\n" +
-			"-td [typo.example]						Manage one typodomain\n" +
-			"-bg    								Active monitor in background\n" +
-			"-pd [domain.example domain2.example]	Check if domains are present\n" +
-			"-mk 									Make config file")
-		return
-	}
 	if *logs {
 		log.ActiveDebugLog()
 	}
