@@ -197,15 +197,14 @@ func iterateCheckGetChanges(tds domains.TypoList) (tdsReliable []domains.TypoDom
 
 func prepareAndSendEmail() {
 
-	tdsInExpiration := getTypoDomainsInExpiration()
-
-	headersStatus, datasStatus, headersWhois, datasWhois := changesToSend.ToTables()
-
-	hExpiry, dExpiry := tdsInExpiration.ToExpiryTable()
-
 	conf := configuration.GetConf()
 
-	if conf.EMAIL != "" || conf.PASSWORD != "" || len(conf.EMAILTONOTIFY) != 0 {
+	if conf.EMAIL != "" && conf.PASSWORD != "" && len(conf.EMAILTONOTIFY) != 0 {
+
+		tdsInExpiration := getTypoDomainsInExpiration()
+		headersStatus, datasStatus, headersWhois, datasWhois := changesToSend.ToTables()
+		hExpiry, dExpiry := tdsInExpiration.ToExpiryTable()
+
 		request := notification.Request{
 			From:     conf.EMAIL,
 			Password: conf.PASSWORD,

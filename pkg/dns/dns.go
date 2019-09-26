@@ -57,33 +57,31 @@ func CheckDNS(d string) (result int, info Dns, err error, duration time.Duration
 	if errSoa == nil || errNS == nil {
 		if respSOA || respNS {
 			result = constants.INACTIVE
-
-			respCNAME, cname, errCNAME := iterateRequest(d, dns.TypeCNAME, mas, tss)
-			info.CNAME = cname
-			errorsMap["cname"] = errCNAME
-			if errCNAME == nil {
-				if respCNAME {
-					result = constants.ALIAS
-				}
-			}
-
-			respA, a, errA := iterateRequest(d, dns.TypeA, mas, tss)
-			info.A = a
-			errorsMap["a"] = errA
-			respAAAA, aaaa, errAAAA := iterateRequest(d, dns.TypeAAAA, mas, tss)
-			info.AAAA = aaaa
-			errorsMap["aaaa"] = errAAAA
-			respMX, mx, errMX := iterateRequest(d, dns.TypeMX, mas, tss)
-			info.MX = mx
-			errorsMap["mx"] = errMX
-
-			if respA || respAAAA || respMX {
-				result = constants.ACTIVE
-			}
-
 		} else {
 			result = constants.AVAILABLE
 		}
+	}
+	respCNAME, cname, errCNAME := iterateRequest(d, dns.TypeCNAME, mas, tss)
+	info.CNAME = cname
+	errorsMap["cname"] = errCNAME
+	if errCNAME == nil {
+		if respCNAME {
+			result = constants.ALIAS
+		}
+	}
+
+	respA, a, errA := iterateRequest(d, dns.TypeA, mas, tss)
+	info.A = a
+	errorsMap["a"] = errA
+	respAAAA, aaaa, errAAAA := iterateRequest(d, dns.TypeAAAA, mas, tss)
+	info.AAAA = aaaa
+	errorsMap["aaaa"] = errAAAA
+	respMX, mx, errMX := iterateRequest(d, dns.TypeMX, mas, tss)
+	info.MX = mx
+	errorsMap["mx"] = errMX
+
+	if respA || respAAAA || respMX {
+		result = constants.ACTIVE
 	}
 
 	var errString string
@@ -103,7 +101,7 @@ func CheckDNS(d string) (result int, info Dns, err error, duration time.Duration
 func iterateRequest(domain string, recordType uint16, maxAttempts int, timesleep int) (bool, string, error) {
 	resp, vl, er := isThereRecord(domain, recordType)
 	for i := 0; i < maxAttempts && er != nil; i++ {
-		resp, vl, er = isThereRecord(domain, dns.TypeSOA)
+		resp, vl, er = isThereRecord(domain, recordType)
 		time.Sleep(time.Duration(timesleep) * time.Millisecond)
 	}
 	return resp, vl, er

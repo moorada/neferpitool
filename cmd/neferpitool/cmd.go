@@ -39,7 +39,7 @@ func CmdRoot() {
 	}
 
 	//init db
-	db.InitDB("database")
+	db.InitDB("config/database")
 	defer db.CloseDB()
 
 	// init flags
@@ -58,8 +58,7 @@ func CmdRoot() {
 			"-td [typo.example]						Manage one typodomain\n" +
 			"-bg    								Active monitor in background\n" +
 			"-pd [domain.example domain2.example]	Check if domains are present\n" +
-			"-mk 									Make config file\n" +
-			"-se 									Show errors about query")
+			"-mk 									Make config file")
 		return
 	}
 	if *logs {
