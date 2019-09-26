@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/likexian/whois-parser-go"
+	whoisparser "github.com/likexian/whois-parser-go"
 	whoisRequest "github.com/moorada/whois"
 
 	"github.com/moorada/neferpitool/pkg/configuration"
