@@ -138,8 +138,6 @@ func background() {
 }
 
 func backgroundWork() {
-	log.RemoveDebugLog()
-	log.ActiveDebugLog()
 	start := time.Now()
 	checkChangesOfAll()
 	prepareAndSendEmail()
@@ -149,6 +147,8 @@ func backgroundWork() {
 	if elapsedMin != 0 {
 		log.Debug("Typodomains scanned per minute: %v", totaltd/elapsedMin)
 	}
+	log.RemoveDebugLog()
+	log.ActiveDebugLog()
 }
 
 func checkChanges(tds domains.TypoList) bool {
