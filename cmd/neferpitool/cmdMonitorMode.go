@@ -230,7 +230,7 @@ func prepareAndSendEmail() {
 	} else {
 		log.Info("No email to send")
 	}
-	changesToSend = []changes.Change{}
+	changesToSend = changes.ChangeList{}
 }
 
 func getTypoDomainsInExpiration() domains.TypoList {

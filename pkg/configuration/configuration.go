@@ -74,13 +74,20 @@ func MakeConfigFile() error {
 	jsonFile, err := os.Create(pathConfig)
 	if err != nil {
 		panic(err)
+	} else {
+		jsonData, err := json.Marshal(config)
+
+		_, err = jsonFile.WriteAt(jsonData, 0)
+		if err != nil {
+			panic(err)
+		}
+
 	}
 
-	jsonData, err := json.Marshal(config)
-
-	_, err = jsonFile.WriteAt(jsonData,0)
 	if err != nil {
-		panic(err)
+		log.Error(err.Error())
+	} else {
+		log.Info("File \"config.json\" created")
 	}
 
 	jsonFile.Close()
