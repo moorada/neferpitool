@@ -1,5 +1,6 @@
 <p align="center">
   <img alt="Neferpitool" src="https://raw.githubusercontent.com/moorada/neferpitool/master/logo.png" width="40%" />
+    <a href="https://github.com/moorada/neferpitool/blob/master/LICENSE.md"><img alt="Software License" src="https://img.shields.io/badge/license-GPL3-brightgreen.svg?style=flat-square"></a>
 </p>
 
 A tool that combines DNS and WHOIS to automatically monitor domain name changes.
