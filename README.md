@@ -4,6 +4,14 @@
 
 A tool that combines DNS and WHOIS to automatically monitor domain name changes.
 
+## Features
+
+* Generation and monitoring of domain variations (typo-domains)
+* Identification and storage of changes regarding the status of typo-domains (status about DNS records and WHOIS info)
+* Background monitoring with user notification via email
+* Configuration of scan and display parameters
+
+## Install
 ```
 go get github.com/moorada/neferpitool/cmd
 GO111MODULE=on go mod vendor
