@@ -152,6 +152,7 @@ func backgroundWork() {
 }
 
 func checkChanges(tds domains.TypoList) bool {
+
 	tdsChanged, changes := iterateCheckGetChanges(tds)
 
 	if changes != nil {
