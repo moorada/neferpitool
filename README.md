@@ -1,11 +1,8 @@
 <p align="center">
-  <img alt="Neferpitool" src="https://raw.githubusercontent.com/moorada/neferpitool/master/logo.png" height="80" />
+  <img alt="Neferpitool" src="https://raw.githubusercontent.com/moorada/neferpitool/master/logo.png" width="40%" />
 </p>
 
-
-The tool have the function of storing and showing information about the domains and typo domains of interest. It will also be able to identify, monitor and notify changes about typo domains via email.
-
-
+A tool that combines DNS and WHOIS to automatically monitor domain name changes.
 
 ```
 go get github.com/moorada/neferpitool/cmd
