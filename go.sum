@@ -133,8 +133,12 @@ github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrk
 github.com/mitchellh/mapstructure v1.1.2/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh9fWfEaFds41c1Y=
 github.com/moorada/log v0.0.0-20190808094004-38ecef4691c2 h1:tJsq0O80IRRa3/iIhY/TzEdiKczS4SXAgrpbC41JGAU=
 github.com/moorada/log v0.0.0-20190808094004-38ecef4691c2/go.mod h1:dre8HRTMYZ4NNJgDd3UOOTtbAW27Bj3RG4IXHdjYK1k=
+github.com/moorada/log v0.0.0-20190925205337-ea8e98779d11 h1:LaXbE4AW5jod1OWbQMRqXZJwM9FCvzNdVE4+UcvHHoY=
+github.com/moorada/log v0.0.0-20190925205337-ea8e98779d11/go.mod h1:dre8HRTMYZ4NNJgDd3UOOTtbAW27Bj3RG4IXHdjYK1k=
 github.com/moorada/whois v0.0.0-20190925174247-425f66c1f2b9 h1:s2T12UM6YY5z17YYU1/79aT1/inl+TvE4K+DbFPt0Jk=
 github.com/moorada/whois v0.0.0-20190925174247-425f66c1f2b9/go.mod h1:mH89ViCzRDzWvx48xyXv3AkYcriNNbXstDR4mlWJIz4=
+github.com/moorada/whois v0.0.0-20190925202157-27c8af21b8ad h1:FUeWB/kXu58fYMCr6IcCrheDbKffv9GopCUGKQMgjX4=
+github.com/moorada/whois v0.0.0-20190925202157-27c8af21b8ad/go.mod h1:mH89ViCzRDzWvx48xyXv3AkYcriNNbXstDR4mlWJIz4=
 github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/nicksnyder/go-i18n v2.0.2+incompatible h1:Xt6dluut3s2zBUha8/3sj6atWMQbFioi9OMqUGH9khg=
 github.com/olekukonko/tablewriter v0.0.1 h1:b3iUnf1v+ppJiOfNX4yxxqfWKMQPZR5yoh8urCTFX88=
