@@ -21,6 +21,8 @@ require (
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/mattn/go-sqlite3 v1.11.0
 	github.com/miekg/dns v1.1.18
+	github.com/moorada/log v0.0.0-20190925205337-ea8e98779d11
+	github.com/moorada/whois v0.0.0-20190925202157-27c8af21b8ad
 	github.com/olekukonko/tablewriter v0.0.1 // indirect
 	github.com/oschwald/geoip2-golang v1.3.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.5.0 // indirect
