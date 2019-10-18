@@ -26,17 +26,6 @@ go build
 ```
 
 ## usage
-Make config file
-```
-./Neferpitool -mc
-
-```
-Add to monitoring or manage a domain
-```
-./Neferpitool github.com
-
-```
-
 Add to monitoring or manage a domain
 ```
 ./Neferpitool github.com
@@ -52,5 +41,11 @@ Active background scan
 Active background scan with log
 ```
 ./Neferpitool -bg -logs
+
+```
+
+Make config file (if you want to configure the scan and display parameters)
+```
+./Neferpitool -mc
 
 ```
