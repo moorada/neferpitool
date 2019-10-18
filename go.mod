@@ -8,6 +8,7 @@ require (
 	github.com/bobesa/go-domain-util v0.0.0-20190911083921-4033b5f7dd89 // indirect
 	github.com/briandowns/spinner v1.7.0
 	github.com/cheggaaa/pb v2.0.7+incompatible
+	github.com/cheggaaa/pb/v3 v3.0.1
 	github.com/cybint/hackingo v0.0.0-20190908192737-924ede13fbff // indirect
 	github.com/cybint/urlinsane v0.0.0-20190901124134-dcf93ebe9a31
 	github.com/evilsocket/islazy v1.10.4
@@ -18,7 +19,6 @@ require (
 	github.com/jinzhu/gorm v1.9.10
 	github.com/likexian/whois-parser-go v0.0.0-20190429170710-0aa0498833b2
 	github.com/manifoldco/promptui v0.3.2
-	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/mattn/go-sqlite3 v1.11.0
 	github.com/miekg/dns v1.1.18
 	github.com/moorada/log v0.0.0-20190925205337-ea8e98779d11

@@ -7,7 +7,7 @@ import (
 
 	"github.com/briandowns/spinner"
 
-	"github.com/cheggaaa/pb"
+	"github.com/cheggaaa/pb/v3"
 
 	"github.com/moorada/neferpitool/pkg/configuration"
 	"github.com/moorada/neferpitool/pkg/scanner"
