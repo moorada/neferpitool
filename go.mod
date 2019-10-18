@@ -7,7 +7,7 @@ require (
 	github.com/arpitgogia/rake v0.0.0-20180919172115-eef46a94533f // indirect
 	github.com/bobesa/go-domain-util v0.0.0-20190911083921-4033b5f7dd89 // indirect
 	github.com/briandowns/spinner v1.7.0
-	github.com/cheggaaa/pb v2.0.7+incompatible
+	github.com/cheggaaa/pb v2.0.7+incompatible // indirect
 	github.com/cheggaaa/pb/v3 v3.0.1
 	github.com/cybint/hackingo v0.0.0-20190908192737-924ede13fbff // indirect
 	github.com/cybint/urlinsane v0.0.0-20190901124134-dcf93ebe9a31
