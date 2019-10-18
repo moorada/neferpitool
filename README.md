@@ -18,9 +18,6 @@ A tool that combines DNS and WHOIS to automatically monitor domain name changes.
 ## Install
 ```
 go get github.com/moorada/neferpitool/cmd
-//in cmd path
-GO111MODULE=on go build
-./cmd
 ```
 
 ## usage
