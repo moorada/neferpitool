@@ -1,5 +1,5 @@
 package cmd
-
+//cmdroot
 import (
 	"flag"
 	"os"

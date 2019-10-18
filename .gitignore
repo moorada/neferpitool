@@ -1,1 +1,6 @@
 config/
+.*
+!.gitignore
+cmd/*
+!cmd/main.go
+!cmd/neferpitool
