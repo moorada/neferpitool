@@ -1,6 +1,8 @@
 package cmd
+
 //cmdroot
 import (
+	"bufio"
 	"flag"
 	"os"
 	"time"
@@ -47,6 +49,8 @@ func CmdRoot() {
 	bg := flag.Bool("bg", false, "Active monitoring in background")
 	pd := flag.Bool("pd", false, "Check if domains are present")
 	makeConfig := flag.Bool("mc", false, "Make config file")
+	importTds := flag.String("it", "", "Import Typos from file - main domain")
+	pathImportTds := flag.String("p", "", "Import Typos from file - path of the file")
 
 	flag.Parse()
 
@@ -64,9 +68,20 @@ func CmdRoot() {
 		background()
 		return
 	}
+
 	if *singleTd != "" {
 		SingleTdMode(*singleTd)
 		return
+	}
+
+	if *importTds != "" {
+		if *pathImportTds != "" {
+			importTypos(*importTds, *pathImportTds)
+			return
+		} else {
+			log.Error("%s", "Specify the path of the import file: -p /path/example/ ")
+		}
+
 	}
 
 	args := flag.Args()
@@ -177,5 +192,49 @@ func addDomainAndHisTypos(domain string) {
 	db.AddLegitDomainToDB(md)
 
 	log.Info("Typodomains added to database")
+
+}
+
+func importTypos(domain string, path string) {
+
+	s := spinner.New(spinner.CharSets[26], 200*time.Millisecond)
+	s.Prefix = "Importing typodomains "
+	s.Start()
+
+	var tds domains.TypoList
+
+	file, err := os.Open(path)
+	if err != nil {
+		log.Error("Importing typos from file, error: %s", domain, err.Error())
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	var typos []string
+	for scanner.Scan() {
+		typos = append(typos, scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		log.Error("Importing typos from file, error: %s", domain, err.Error())
+	}
+
+	if len(typos) > 0 {
+		for _, t := range typos {
+			td := domains.NewTypoDomain(t, domain, "imported")
+			tds = append(tds, td)
+		}
+	} else {
+		log.Error("Empty file, error: %s", domain, err.Error())
+	}
+
+	s.Stop()
+
+	errs := UpdateTypoDomainsWithProgressBar(tds)
+	if len(errs) != 0 {
+		console.PrintTableErrs(errs)
+	}
+
+	db.AddTypoListToDB(tds)
+
+	log.Info("Typodomains imported")
 
 }

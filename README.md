@@ -6,13 +6,13 @@
 
   <p align="center"><a href="https://github.com/moorada/neferpitool/blob/master/LICENSE.md"><img alt="Software License" src="https://img.shields.io/badge/license-GPL3-brightgreen.svg?style=flat-square"></a></p>
 
-A tool that combines DNS and WHOIS to automatically monitor domain name changes.
+Neferpitool is a tool that combines DNS and WHOIS to automatically monitor domain name changes.
 
 ## Features
 
 * Generation and monitoring of domain variations (typo-domains)
 * Identification and storage of changes regarding the status of typo-domains (status about DNS records and WHOIS info)
-* Background monitoring with user notification via email
+* Background monitoring with notification via email
 * Configuration of scan and display parameters
 
 ## Install
