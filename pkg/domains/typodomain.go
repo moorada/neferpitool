@@ -34,7 +34,7 @@ func (td TypoDomain) IsChanged() (bool, TypoDomain) {
 	}
 }
 
-/*Compare two main domains and return true is their are equals*/
+/*Compare two main domains and return true is they are equals*/
 func (td TypoDomain) IsEqual(td2 TypoDomain) bool {
 	return td.LegitDomain == td2.LegitDomain && td.Domain.IsEqual(td2.Domain)
 }

@@ -20,11 +20,72 @@ func EmailChanges(tpl TemplateData, req Request) (err error) {
 	if len(tpl.DatasStatus) == 0 {
 		tpl.TextStatus = "There aren't status changes"
 	}
+
+	err = req.parseTemplate("./config/table.html", tpl)
+
+	if err != nil {
+		err = req.parseTemplateString(tpl)
+	}
+	if err != nil {
+		log.Fatal(err.Error())
+	} else {
+		ok, err := req.sendEmail()
+		if !ok {
+			log.Error("Error To sendEmail, %s\n, %s\n, %s", err.Error(), req.From, req.Password)
+		} else {
+			log.Debug("Email sent To %s, Subject: %s", req.To, req.Subject)
+		}
+	}
+	return
+}
+
+func EmailDailyUpdate(tpl TemplateData, req Request) (err error) {
+
+	auth = smtp.PlainAuth("", req.From, req.Password, "smtp.gmail.com")
+
+	if len(tpl.DatasWhois) == 0 {
+		tpl.TextWhois = "No whois changes in the last 24 hours"
+	}
+	if len(tpl.DatasStatus) == 0 {
+		tpl.TextStatus = "No status changes in the last 24 hours"
+	}
 	if len(tpl.DatasExpiry) == 0 {
 		tpl.TextExpiry = "No Typo-domains in expiration"
 	}
 
-	err = req.parseTemplate("./config/table.html", tpl)
+	err = req.parseTemplate("./config/daily.html", tpl)
+
+	if err != nil {
+		err = req.parseTemplateString(tpl)
+	}
+	if err != nil {
+		log.Fatal(err.Error())
+	} else {
+		ok, err := req.sendEmail()
+		if !ok {
+			log.Error("Error To sendEmail, %s\n, %s\n, %s", err.Error(), req.From, req.Password)
+		} else {
+			log.Debug("Email sent To %s, Subject: %s", req.To, req.Subject)
+		}
+	}
+	return
+}
+
+func EmailMonthlyUpdate(tpl TemplateData, req Request) (err error) {
+
+	auth = smtp.PlainAuth("", req.From, req.Password, "smtp.gmail.com")
+
+	if len(tpl.DatasWhois) == 0 {
+		tpl.TextWhois = "There aren't whois changes"
+	}
+	if len(tpl.DatasStatus) == 0 {
+		tpl.TextStatus = "There aren't status changes"
+	}
+	if len(tpl.DatasExpiry) == 0 {
+		tpl.TextExpiry = "No Typo-domains in expiration"
+	}
+
+	err = req.parseTemplate("./config/monthly.html", tpl)
 
 	if err != nil {
 		err = req.parseTemplateString(tpl)
@@ -82,3 +143,7 @@ func (r *Request) parseTemplateString(data interface{}) error {
 	return nil
 
 }
+
+const (
+	pathSecret = "./config/secret.json"
+)

@@ -63,7 +63,7 @@ func GetTypoDomainListFromDB(mainDomain string) domains.TypoList {
 	*/
 	//db.Exec("SELECT	 * , MAX(updated_at) from typo_domains group by name").Scan(&tds)
 	return uniqueTypoDomains(tds)
-	return tds
+	//return tds
 }
 
 func GetTypoDomainListWithStatusFromDB(mainDomain string, status []int) domains.TypoList {

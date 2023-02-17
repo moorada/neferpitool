@@ -96,7 +96,7 @@ func PrintWhoisStats() {
 func getTLD(domain string) string {
 	domains := strings.Split(domain, ".")
 	if len(domains) < 2 {
-		log.Fatal("DomainName %s is invalid", domain)
+		log.Fatal("DomainName %s is not valid", domain)
 	}
 	return domains[len(domains)-1]
 
