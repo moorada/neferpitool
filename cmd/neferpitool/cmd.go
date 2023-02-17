@@ -160,12 +160,16 @@ func UpdateTypoDomainsWithProgressBar(tds domains.TypoList) map[string]error {
 		errs = scanner.UpdateTypoDomains(tds, c)
 	}(errs)
 
-	for _ = range tds {
+	for range tds {
 		<-c
 		bar.Increment()
 	}
 	bar.Finish()
-	log.Debug("Stats Scansion, Typodomains: %v, Errors: %v, Percentage of errors: %v", len(tds), len(errs), len(errs)*100/len(tds))
+	if len(tds) > 0 {
+		log.Debug("Stats Scansion, Typodomains: %v, Errors: %v, Percentage of errors: %v", len(tds), len(errs), len(errs)*100/len(tds))
+	} else {
+		log.Debug("no typodomains")
+	}
 	return errs
 }
 
