@@ -223,8 +223,10 @@ func importTypos(domain string, path string) {
 
 	if len(typos) > 0 {
 		for _, t := range typos {
-			td := domains.NewTypoDomain(t, domain, "imported")
-			tds = append(tds, td)
+			if t != "" {
+				td := domains.NewTypoDomain(t, domain, "imported")
+				tds = append(tds, td)
+			}
 		}
 	} else {
 		log.Error("Empty file, error: %s", domain, err.Error())
