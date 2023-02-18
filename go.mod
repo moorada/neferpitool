@@ -3,6 +3,7 @@ module github.com/moorada/neferpitool
 go 1.12
 
 require (
+	cloud.google.com/go v0.107.0 // indirect
 	github.com/araddon/dateparse v0.0.0-20190622164848-0fb0a474d195
 	github.com/arpitgogia/rake v0.0.0-20180919172115-eef46a94533f // indirect
 	github.com/bobesa/go-domain-util v0.0.0-20190911083921-4033b5f7dd89 // indirect
@@ -25,12 +26,13 @@ require (
 	github.com/olekukonko/tablewriter v0.0.1 // indirect
 	github.com/oschwald/geoip2-golang v1.3.0 // indirect
 	github.com/oschwald/maxminddb-golang v1.5.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/sheerun/queue v1.0.0
 	github.com/spf13/cobra v0.0.5 // indirect
 	github.com/tkanos/gonfig v0.0.0-20181112185242-896f3d81fadf
+	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa // indirect
 	golang.org/x/net v0.6.0
-	golang.org/x/oauth2 v0.5.0
-	google.golang.org/api v0.110.0
+	golang.org/x/tools v0.3.0 // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 
 )

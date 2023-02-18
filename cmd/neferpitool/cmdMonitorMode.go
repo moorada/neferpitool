@@ -15,9 +15,11 @@ import (
 	"github.com/moorada/neferpitool/pkg/notification"
 	"github.com/moorada/neferpitool/pkg/reliableChanges"
 	"github.com/moorada/neferpitool/pkg/stats"
+	"github.com/robfig/cron/v3"
 )
 
 var changesToSend changes.ChangeList
+var changesReportToSend changes.ChangeList
 
 func MonitorCmd() {
 
@@ -155,6 +157,7 @@ func background() {
 }
 
 func backgroundWork() {
+	go runCronJobs()
 	start := time.Now()
 	checkChangesOfAll()
 	if len(changesToSend) > 0 {
@@ -165,6 +168,17 @@ func backgroundWork() {
 	log.Debug("Time of full scansion: %v", elapsed)
 	if elapsedMin != 0 {
 		log.Debug("Typodomains scanned per minute: %v", totaltd/elapsedMin)
+	}
+}
+
+func runCronJobs() {
+	s := cron.New()
+	_, err := s.AddFunc(configuration.GetConf().REPORTFREQUENCY, func() { prepareAndSendReportEmail() })
+	if err != nil {
+		log.Error("Cron error: %s", err)
+	} else {
+		log.Debug("Cron Job started")
+		s.Start()
 	}
 }
 
@@ -252,11 +266,56 @@ func prepareAndSendEmail() {
 		err := notification.EmailChanges(tpl, request)
 		if err != nil {
 			log.Error(err.Error())
+		} else {
+			log.Info("Changes sent by email")
 		}
 	} else {
 		log.Info("No email to send")
 	}
+	changesReportToSend = append(changesReportToSend, changesToSend...)
 	changesToSend = changes.ChangeList{}
+}
+
+func prepareAndSendReportEmail() {
+
+	conf := configuration.GetConf()
+
+	if conf.EMAIL != "" && conf.PASSWORD != "" && len(conf.EMAILTONOTIFY) != 0 {
+
+		tdsInExpiration := getTypoDomainsInExpiration()
+		headersStatus, datasStatus, headersWhois, datasWhois := changesReportToSend.ToTables()
+		hExpiry, dExpiry := tdsInExpiration.ToExpiryTable()
+
+		request := notification.Request{
+			From:     conf.EMAIL,
+			Password: conf.PASSWORD,
+			To:       conf.EMAILTONOTIFY,
+			Subject:  "domain monitoring - Report of the day",
+		}
+
+		tpl := notification.TemplateData{
+			H1:            "Domains Monitoring",
+			TextStatus:    "There are status changes",
+			TextWhois:     "There are whois changes",
+			HeadersStatus: headersStatus,
+			HeadersWhois:  headersWhois,
+			DatasStatus:   datasStatus,
+			DatasWhois:    datasWhois,
+			TextExpiry:    "Typodomains in expiration",
+			HeadersExpiry: hExpiry,
+			DatasExpiry:   dExpiry,
+		}
+
+		err := notification.EmailChanges(tpl, request)
+		if err != nil {
+			log.Error(err.Error())
+		} else {
+			log.Info("Report sent by email")
+		}
+	} else {
+		log.Info("No email to send")
+	}
+	changesReportToSend = changes.ChangeList{}
 }
 
 func getTypoDomainsInExpiration() domains.TypoList {
