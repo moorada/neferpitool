@@ -37,7 +37,7 @@ Add to monitoring or manage a domain
 ```
   -bg
     	Active monitoring in background
-  -it string -p 
+  -it string -p string
     	Import Typos from file : -main domain -path of the file
   -logs
     	Avtive logs on file
