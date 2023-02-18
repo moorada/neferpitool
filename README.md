@@ -37,14 +37,12 @@ Add to monitoring or manage a domain
 ```
   -bg
     	Active monitoring in background
-  -it string
-    	Import Typos from file - main domain
+  -it string -p 
+    	Import Typos from file : -main domain -path of the file
   -logs
     	Avtive logs on file
   -mc
     	Make config file
-  -p string
-    	Import Typos from file - path of the file
   -pd
     	Check if domains are present
   -td string
@@ -84,7 +82,7 @@ ALIAS: if it is the CNAME record is present;
 ACTIVE: if A, AAAA or MX records are present;
 ```
 
-*** Typosquatting alghoritms ***
+### Typosquatting alghoritms
 ```
   MD	Missing Dot is created by omitting a dot from the domain.
   MDS	Missing Dashes is created by stripping all dashes from the domain.
