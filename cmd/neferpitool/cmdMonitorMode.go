@@ -61,30 +61,7 @@ func test() {
 		L'affidabilità?
 
 	*/
-	// 	tdsU := db.GetTypoDomainListFromDB()
-	// 	tds := db.GetAllTypoDomainListFromDB()
-	// 	changes
 
-	// 	dateNow := 1
-	// 	dateBefore := 2
-
-	// 	for _, d := range tdsU {
-	// 		date1MonthBefore = d.Cre
-	// 		for _, d2 := range tds {
-	// 			if d.Name == d2.Name /*&& d.CreatedAt TODO*/{
-	// 				d.CreatedAt.
-
-	// 			}
-	// 			mdsnames = append(mdsnames, d.Name)
-	// 		}
-	// 		mdsnames = append(mdsnames, d.Name)
-	// 	}
-
-	// 	for
-	// 	db.GEt
-	// 	log.Info("Len: %s", len(tds))
-	// 	console.PrintTableTypoDomains(tds)
-	// 	tds[0].CreatedAt.
 }
 
 func showTypoDomainsInExpiration() {
@@ -180,15 +157,15 @@ func background() {
 func backgroundWork() {
 	start := time.Now()
 	checkChangesOfAll()
-	prepareAndSendEmail()
+	if len(changesToSend) > 0 {
+		prepareAndSendEmail()
+	}
 	elapsed := time.Since(start)
 	elapsedMin := int(elapsed / time.Minute)
 	log.Debug("Time of full scansion: %v", elapsed)
 	if elapsedMin != 0 {
 		log.Debug("Typodomains scanned per minute: %v", totaltd/elapsedMin)
 	}
-	log.RemoveDebugLog()
-	log.ActiveDebugLog()
 }
 
 func checkChanges(tds domains.TypoList) bool {

@@ -55,7 +55,9 @@ func CmdRoot() {
 	flag.Parse()
 
 	if *logs {
-		log.ActiveDebugLog()
+		if err := log.ActiveDebugLog(); err != nil {
+			panic(err)
+		}
 	}
 
 	if *makeConfig {
@@ -64,6 +66,7 @@ func CmdRoot() {
 	}
 
 	logDegubInfo()
+
 	if *bg {
 		background()
 		return

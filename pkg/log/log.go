@@ -46,7 +46,6 @@ func ActiveDebugLog() (err error) {
 }
 
 func Close() {
-
 	ll.CloseOutputs()
 }
 
