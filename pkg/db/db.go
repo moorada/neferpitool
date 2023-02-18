@@ -5,6 +5,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/moorada/neferpitool/pkg/domains"
 	"github.com/moorada/neferpitool/pkg/log"
+	"github.com/moorada/neferpitool/pkg/reliableChanges"
 )
 
 var db *gorm.DB
@@ -21,6 +22,7 @@ func InitDB(nameDB string) {
 	// Migrate the schema
 	db.AutoMigrate(&domains.LegitDomain{})
 	db.AutoMigrate(&domains.TypoDomain{})
+	db.AutoMigrate(&reliableChanges.ReliableChange{})
 }
 
 func CloseDB() {
@@ -90,6 +92,12 @@ func GetAllTypoDomainListFromDB() domains.TypoList {
 func AddTypoListToDB(tds domains.TypoList) {
 	for _, td := range tds {
 		AddTypoDomainToDB(td)
+	}
+}
+
+func AddReliableChangeListToDB(tds []reliableChanges.ReliableChange) {
+	for _, td := range tds {
+		AddReliableChangeToDB(td)
 	}
 }
 

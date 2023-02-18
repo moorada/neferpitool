@@ -44,36 +44,45 @@ func MakeChangeList(tdsOld domains.TypoList, tdsNew domains.TypoList) (tdsOldCh 
 			continue
 		}
 
-		w1 := tdOld.GetWhois()
-		w2 := tdNew.GetWhois()
+		tdcsTemp := MakeChange(tdOld, tdNew)
 
-		name := w1.Parsed.Registrant.RegistrantName == w2.Parsed.Registrant.RegistrantName
-		organization := w1.Parsed.Registrant.Organization == w2.Parsed.Registrant.Organization
-		expirationDate := w1.Parsed.Registrar.ExpirationDate == w2.Parsed.Registrar.ExpirationDate
-
-		status := tdOld.Status == tdNew.Status
-		if !status {
-			tdcs = append(tdcs, Change{tdOld.Name, STATUS, tdOld.StatusToString(), tdNew.StatusToString()})
-		} else {
-			if !name {
-				tdcs = append(tdcs, Change{tdOld.Name, NAME_REGISTRANT, w1.Parsed.Registrant.RegistrantName, w2.Parsed.Registrant.RegistrantName})
-			}
-			if !organization {
-				tdcs = append(tdcs, Change{tdOld.Name, ORGANIZAIOTN, w1.Parsed.Registrant.Organization, w2.Parsed.Registrant.Organization})
-			}
-			if !expirationDate {
-				tdcs = append(tdcs, Change{tdOld.Name, EXPIRATION_DATE, w1.Parsed.Registrar.ExpirationDate, w2.Parsed.Registrar.ExpirationDate})
-			}
-		}
-
-		if !name || !organization || !expirationDate || !status {
-			if !status {
-				log.Debug("%s is changed about status", tdNew.Name)
-			} else {
-				log.Debug("%s is changed about whois", tdNew.Name)
-			}
+		if len(tdcsTemp) > 0 {
+			tdcs = append(tdcs, tdcsTemp...)
 			tdsOldCh = append(tdsOldCh, tdOld)
 			tdsNewCh = append(tdsNewCh, tdNew)
+		}
+	}
+	return
+}
+
+func MakeChange(tdOld domains.TypoDomain, tdNew domains.TypoDomain) (tdcs ChangeList) {
+	w1 := tdOld.GetWhois()
+	w2 := tdNew.GetWhois()
+
+	name := w1.Parsed.Registrant.RegistrantName == w2.Parsed.Registrant.RegistrantName
+	organization := w1.Parsed.Registrant.Organization == w2.Parsed.Registrant.Organization
+	expirationDate := w1.Parsed.Registrar.ExpirationDate == w2.Parsed.Registrar.ExpirationDate
+
+	status := tdOld.Status == tdNew.Status
+	if !status {
+		tdcs = append(tdcs, Change{tdOld.Name, STATUS, tdOld.StatusToString(), tdNew.StatusToString()})
+	} else {
+		if !name {
+			tdcs = append(tdcs, Change{tdOld.Name, NAME_REGISTRANT, w1.Parsed.Registrant.RegistrantName, w2.Parsed.Registrant.RegistrantName})
+		}
+		if !organization {
+			tdcs = append(tdcs, Change{tdOld.Name, ORGANIZAIOTN, w1.Parsed.Registrant.Organization, w2.Parsed.Registrant.Organization})
+		}
+		if !expirationDate {
+			tdcs = append(tdcs, Change{tdOld.Name, EXPIRATION_DATE, w1.Parsed.Registrar.ExpirationDate, w2.Parsed.Registrar.ExpirationDate})
+		}
+	}
+
+	if !name || !organization || !expirationDate || !status {
+		if !status {
+			log.Debug("%s is changed about status", tdNew.Name)
+		} else {
+			log.Debug("%s is changed about whois", tdNew.Name)
 		}
 	}
 	return

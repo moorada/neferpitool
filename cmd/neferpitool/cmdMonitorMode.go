@@ -13,6 +13,7 @@ import (
 	"github.com/moorada/neferpitool/pkg/domains"
 	"github.com/moorada/neferpitool/pkg/log"
 	"github.com/moorada/neferpitool/pkg/notification"
+	"github.com/moorada/neferpitool/pkg/reliableChanges"
 	"github.com/moorada/neferpitool/pkg/stats"
 )
 
@@ -23,7 +24,7 @@ func MonitorCmd() {
 	for true {
 		prompt := promptui.Select{
 			Label: "Monitor mode",
-			Items: []string{"Domains", "Show all Typodomains in Expiration", "Check for changes", "Active changes in background", "Stats"},
+			Items: []string{"Domains", "Show all Typodomains in Expiration", "Check for changes", "Active changes in background", "Stats", "Test"},
 		}
 
 		_, result, err := prompt.Run()
@@ -43,8 +44,47 @@ func MonitorCmd() {
 			background()
 		case "Stats":
 			stats.PrintWhoisStats()
+		case "Test":
+			test()
 		}
 	}
+}
+
+func test() {
+
+	/*
+		Prendere tutti i typos di un mese fa
+		Prendere tutti gli ultimi typos
+		Dare in pasto a MakeChanges
+		Ritornare il risultato
+
+		L'affidabilità?
+
+	*/
+	// 	tdsU := db.GetTypoDomainListFromDB()
+	// 	tds := db.GetAllTypoDomainListFromDB()
+	// 	changes
+
+	// 	dateNow := 1
+	// 	dateBefore := 2
+
+	// 	for _, d := range tdsU {
+	// 		date1MonthBefore = d.Cre
+	// 		for _, d2 := range tds {
+	// 			if d.Name == d2.Name /*&& d.CreatedAt TODO*/{
+	// 				d.CreatedAt.
+
+	// 			}
+	// 			mdsnames = append(mdsnames, d.Name)
+	// 		}
+	// 		mdsnames = append(mdsnames, d.Name)
+	// 	}
+
+	// 	for
+	// 	db.GEt
+	// 	log.Info("Len: %s", len(tds))
+	// 	console.PrintTableTypoDomains(tds)
+	// 	tds[0].CreatedAt.
 }
 
 func showTypoDomainsInExpiration() {
@@ -156,6 +196,15 @@ func checkChanges(tds domains.TypoList) bool {
 	tdsChanged, changes := iterateCheckGetChanges(tds)
 
 	if changes != nil {
+		/*Here add reliable changes to DB*/
+
+		var rChanges []reliableChanges.ReliableChange
+
+		for _, c := range changes {
+			rChanges = append(rChanges, reliableChanges.ReliableChange{TypoDomain: c.TypoDomain, Field: c.Field, Before: c.Before, After: c.After})
+		}
+		db.AddReliableChangeListToDB(rChanges)
+
 		db.AddTypoListToDB(tdsChanged)
 		console.PrintChanges(changes)
 		changesToSend = append(changesToSend, changes...)
@@ -179,7 +228,7 @@ func iterateCheckGetChanges(tds domains.TypoList) (tdsReliable []domains.TypoDom
 		s := spinner.New(spinner.CharSets[26], 200*time.Millisecond) // Build our new spinner
 		s.Prefix = "Sleeping "
 		s.Start()
-		time.Sleep(1 * time.Minute)
+		time.Sleep(time.Duration(configuration.GetConf().CHECKRELIABILITYTIME) * time.Millisecond)
 		s.Stop()
 		errs := UpdateTypoDomainsWithProgressBar(tdsNewCh)
 		if len(errs) > 0 {

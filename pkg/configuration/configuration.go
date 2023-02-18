@@ -22,6 +22,7 @@ type configuration struct {
 	SHOWSTATUS                    []string
 	PATHRESOLVER                  string
 	HOURSLEEPBACKGROUNDMONITORING int
+	CHECKRELIABILITYTIME          int
 }
 
 const (
@@ -44,6 +45,7 @@ var (
 		SHOWSTATUS:                    []string{"Inactive", "Active", "Available", "Unknown", "Alias"},
 		PATHRESOLVER:                  "./config/resolv.conf",
 		HOURSLEEPBACKGROUNDMONITORING: 1,
+		CHECKRELIABILITYTIME:          2000,
 	}
 )
 
