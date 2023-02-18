@@ -1,7 +1,6 @@
-config/
-.*
+*.conf
+*.log
+*.json
+*.db
+*.import
 !.gitignore
-cmd/*
-!cmd/main.go
-!cmd/neferpitool
-!cmd/emailTemplates/
