@@ -10,9 +10,10 @@ RUN apt-get update \
 RUN sed -i 's/OPTIONS=.*/OPTIONS="-4 -u bind"/' /etc/default/bind9
 
 # Copy configuration files
-COPY named.conf.options /etc/bind/
-COPY named.conf.local /etc/bind/
-COPY db.test-neferpitool.com /etc/bind/zones/
+COPY etc/bind/named.conf.options /etc/bind/
+COPY etc/bind/named.conf.local /etc/bind/
+COPY etc/bind/zones/db.test-neferpitool.com /etc/bind/zones/
+COPY etc/bind/zones/db.neferpitool /etc/bind/zones/
 
 # Run eternal loop
 CMD ["/bin/bash", "-c", "while :; do sleep 10; done"]

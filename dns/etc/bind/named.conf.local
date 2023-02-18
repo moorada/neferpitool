@@ -2,3 +2,8 @@ zone "test-neferpitool.com" {
     type master;
     file "/etc/bind/zones/db.test-neferpitool.com";
 };
+
+zone "neferpitool" {
+    type master;
+    file "/etc/bind/zones/db.neferpitool";
+};

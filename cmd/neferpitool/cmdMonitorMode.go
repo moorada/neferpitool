@@ -170,10 +170,9 @@ func iterateCheckGetChanges(tds domains.TypoList) (tdsReliable []domains.TypoDom
 
 	tdsNew := tds.GetUnfilledCopy()
 	errs := UpdateTypoDomainsWithProgressBar(tdsNew)
-	if len(errs) != 0 {
+	if len(errs) > 0 {
 		console.PrintTableErrs(errs)
 	}
-	console.PrintTableErrs(errs)
 	tdsOldCh, tdsNewCh, chs := changes.MakeChangeList(tds, tdsNew)
 	for i := 0; i < 2 && len(tdsOldCh) > 0; i++ {
 		log.Info("Checking reliability about %v changes", len(chs))
@@ -183,7 +182,7 @@ func iterateCheckGetChanges(tds domains.TypoList) (tdsReliable []domains.TypoDom
 		time.Sleep(1 * time.Minute)
 		s.Stop()
 		errs := UpdateTypoDomainsWithProgressBar(tdsNewCh)
-		if len(errs) != 0 {
+		if len(errs) > 0 {
 			console.PrintTableErrs(errs)
 		}
 		tdsOldChNext, tdsNewChNext, chsNext := changes.MakeChangeList(tdsOldCh, tdsNewCh)
