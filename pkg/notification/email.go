@@ -21,7 +21,7 @@ func EmailChanges(tpl TemplateData, req Request) (err error) {
 		tpl.TextStatus = "There aren't status changes"
 	}
 
-	err = req.parseTemplate("./config/table.html", tpl)
+	err = req.parseTemplate("./config/emailTemplates/table.html", tpl)
 
 	if err != nil {
 		err = req.parseTemplateString(tpl)
@@ -53,7 +53,7 @@ func EmailDailyUpdate(tpl TemplateData, req Request) (err error) {
 		tpl.TextExpiry = "No Typo-domains in expiration"
 	}
 
-	err = req.parseTemplate("./config/daily.html", tpl)
+	err = req.parseTemplate("./config/emailTemplates/daily.html", tpl)
 
 	if err != nil {
 		err = req.parseTemplateString(tpl)
@@ -85,7 +85,7 @@ func EmailMonthlyUpdate(tpl TemplateData, req Request) (err error) {
 		tpl.TextExpiry = "No Typo-domains in expiration"
 	}
 
-	err = req.parseTemplate("./config/monthly.html", tpl)
+	err = req.parseTemplate("./config/emailTemplates/monthly.html", tpl)
 
 	if err != nil {
 		err = req.parseTemplateString(tpl)
