@@ -1,0 +1,142 @@
+# github.com/VividCortex/ewma v1.1.1
+github.com/VividCortex/ewma
+# github.com/alecthomas/gometalinter v2.0.11+incompatible
+github.com/alecthomas/gometalinter
+# github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf
+github.com/alecthomas/units
+# github.com/araddon/dateparse v0.0.0-20190622164848-0fb0a474d195
+github.com/araddon/dateparse
+# github.com/arpitgogia/rake v0.0.0-20180919172115-eef46a94533f
+github.com/arpitgogia/rake
+# github.com/bobesa/go-domain-util v0.0.0-20190911083921-4033b5f7dd89
+github.com/bobesa/go-domain-util/domainutil
+# github.com/briandowns/spinner v1.7.0
+github.com/briandowns/spinner
+# github.com/cheggaaa/pb/v3 v3.0.1
+github.com/cheggaaa/pb/v3
+github.com/cheggaaa/pb/v3/termutil
+# github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
+github.com/chzyer/readline
+# github.com/client9/misspell v0.3.4
+github.com/client9/misspell
+github.com/client9/misspell/cmd/misspell
+# github.com/cybint/hackingo v0.0.0-20190908192737-924ede13fbff
+github.com/cybint/hackingo/datasets
+github.com/cybint/hackingo/net/dns
+github.com/cybint/hackingo/net/geoip
+github.com/cybint/hackingo/net/http
+github.com/cybint/hackingo/nlp
+# github.com/cybint/urlinsane v0.0.0-20190901124134-dcf93ebe9a31
+github.com/cybint/urlinsane/pkg
+github.com/cybint/urlinsane/pkg/typo
+github.com/cybint/urlinsane/pkg/typo/languages
+# github.com/evilsocket/islazy v1.10.4
+github.com/evilsocket/islazy/log
+github.com/evilsocket/islazy/tui
+# github.com/fatih/color v1.7.0
+github.com/fatih/color
+# github.com/ghodss/yaml v1.0.0
+github.com/ghodss/yaml
+# github.com/glaslos/ssdeep v0.0.0-20180701154738-40ecfd949d42
+github.com/glaslos/ssdeep
+# github.com/golang/lint v0.0.0-20181026193005-c67002cb31c3
+github.com/golang/lint/golint
+# github.com/google/go-cmp v0.5.9
+github.com/google/go-cmp/cmp
+github.com/google/go-cmp/cmp/internal/diff
+github.com/google/go-cmp/cmp/internal/flags
+github.com/google/go-cmp/cmp/internal/function
+github.com/google/go-cmp/cmp/internal/value
+# github.com/google/shlex v0.0.0-20181106134648-c34317bd91bf
+github.com/google/shlex
+# github.com/gordonklaus/ineffassign v0.0.0-20180909121442-1003c8bd00dc
+github.com/gordonklaus/ineffassign
+# github.com/inconshreveable/mousetrap v1.0.0
+github.com/inconshreveable/mousetrap
+# github.com/jinzhu/gorm v1.9.10
+github.com/jinzhu/gorm
+# github.com/jinzhu/inflection v1.0.0
+github.com/jinzhu/inflection
+# github.com/juju/ansiterm v0.0.0-20180109212912-720a0952cc2a
+github.com/juju/ansiterm
+github.com/juju/ansiterm/tabwriter
+# github.com/likexian/gokit v0.0.0-20190425151316-c6325fef5934
+github.com/likexian/gokit/assert
+github.com/likexian/gokit/xslice
+# github.com/likexian/whois-parser-go v0.0.0-20190429170710-0aa0498833b2
+github.com/likexian/whois-parser-go
+# github.com/lunixbochs/vtclean v0.0.0-20180621232353-2d01aacdc34a
+github.com/lunixbochs/vtclean
+# github.com/manifoldco/promptui v0.3.2
+github.com/manifoldco/promptui
+github.com/manifoldco/promptui/list
+github.com/manifoldco/promptui/screenbuf
+# github.com/mattn/go-colorable v0.1.2
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.8
+github.com/mattn/go-isatty
+# github.com/mattn/go-runewidth v0.0.4
+github.com/mattn/go-runewidth
+# github.com/mattn/go-sqlite3 v1.11.0
+github.com/mattn/go-sqlite3
+# github.com/miekg/dns v1.1.18
+github.com/miekg/dns
+# github.com/moorada/log v0.0.0-20190925205337-ea8e98779d11
+github.com/moorada/log
+# github.com/moorada/whois v0.0.0-20190925202157-27c8af21b8ad
+github.com/moorada/whois
+# github.com/nicksnyder/go-i18n v1.10.1
+github.com/nicksnyder/go-i18n/i18n
+github.com/nicksnyder/go-i18n/i18n/bundle
+github.com/nicksnyder/go-i18n/i18n/language
+github.com/nicksnyder/go-i18n/i18n/translation
+# github.com/olekukonko/tablewriter v0.0.1
+github.com/olekukonko/tablewriter
+# github.com/oschwald/geoip2-golang v1.3.0
+github.com/oschwald/geoip2-golang
+# github.com/oschwald/maxminddb-golang v1.5.0
+github.com/oschwald/maxminddb-golang
+# github.com/pelletier/go-toml v1.2.0
+github.com/pelletier/go-toml
+# github.com/sheerun/queue v1.0.0
+github.com/sheerun/queue
+# github.com/spf13/cobra v0.0.5
+github.com/spf13/cobra
+# github.com/spf13/pflag v1.0.3
+github.com/spf13/pflag
+# github.com/tkanos/gonfig v0.0.0-20181112185242-896f3d81fadf
+github.com/tkanos/gonfig
+# github.com/tsenart/deadcode v0.0.0-20160724212837-210d2dc333e9
+github.com/tsenart/deadcode
+# golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
+golang.org/x/crypto/ed25519
+golang.org/x/crypto/ed25519/internal/edwards25519
+# golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
+golang.org/x/lint
+# golang.org/x/net v0.6.0
+golang.org/x/net/bpf
+golang.org/x/net/idna
+golang.org/x/net/internal/iana
+golang.org/x/net/internal/socket
+golang.org/x/net/ipv4
+golang.org/x/net/ipv6
+# golang.org/x/sys v0.5.0
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# golang.org/x/text v0.7.0
+golang.org/x/text/secure/bidirule
+golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm
+# golang.org/x/tools v0.3.0
+golang.org/x/tools/go/ast/astutil
+golang.org/x/tools/go/gcexportdata
+golang.org/x/tools/internal/gcimporter
+golang.org/x/tools/internal/goroot
+golang.org/x/tools/internal/pkgbits
+golang.org/x/tools/internal/typeparams
+# gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c
+gopkg.in/alecthomas/kingpin.v3-unstable
+# gopkg.in/yaml.v2 v2.2.3
+gopkg.in/yaml.v2

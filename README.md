@@ -44,3 +44,10 @@ Make config file (if you want to configure the scan and display parameters)
 ./Neferpitool -mc
 
 ```
+
+## Run in a docker container
+Add to monitoring or manage a domain
+```
+docker build -t neferpitool .
+
+```
