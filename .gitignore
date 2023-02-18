@@ -4,3 +4,4 @@ config/
 cmd/*
 !cmd/main.go
 !cmd/neferpitool
+!cmd/emailTemplates/
