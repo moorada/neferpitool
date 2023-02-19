@@ -23,7 +23,7 @@ type configuration struct {
 	PATHRESOLVER                  string
 	HOURSLEEPBACKGROUNDMONITORING int
 	CHECKRELIABILITYTIME          int
-	REPORTFREQUENCY               string
+	REPORTFREQUENCY               []string
 }
 
 const (
@@ -47,7 +47,7 @@ var (
 		PATHRESOLVER:                  "./config/resolv.conf",
 		HOURSLEEPBACKGROUNDMONITORING: 1,
 		CHECKRELIABILITYTIME:          2000,
-		REPORTFREQUENCY:               "0 30 * * * *",
+		REPORTFREQUENCY:               []string{"0 30 9 * * *"},
 	}
 )
 
