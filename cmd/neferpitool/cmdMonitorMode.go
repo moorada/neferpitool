@@ -187,7 +187,6 @@ func checkChanges(tds domains.TypoList) bool {
 	tdsChanged, changes := iterateCheckGetChanges(tds)
 
 	if changes != nil {
-		/*Here add reliable changes to DB*/
 
 		var rChanges []reliableChanges.ReliableChange
 

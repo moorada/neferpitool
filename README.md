@@ -6,10 +6,19 @@
 
   <p align="center"><a href="https://github.com/moorada/neferpitool/blob/master/LICENSE.md"><img alt="Software License" src="https://img.shields.io/badge/license-GPL3-brightgreen.svg?style=flat-square"></a></p>
 
-Neferpitool is a tool that combines DNS and WHOIS to automatically monitor domain name changes.
 
-The faster, unrestricted DNS protocol is used on all domains to verify their status by analyzing DNS records. Meanwhile, the WHOIS protocol is used only on registered domains and thus on a more limited number of domains.
-This will take advantage of the DNS protocol to filter the domains to be monitored and then use the protocol WOIS which is more limited, to extract information about domains.
+Neferpitool is a powerful tool that seamlessly integrates DNS and WHOIS protocols to automatically monitor domain name changes. By utilizing the faster and more unrestricted DNS protocol, Neferpitool is able to analyze the DNS records of all monitored domains and verify their status in real time. This enables the tool to quickly filter out domains that are not registered or are otherwise unavailable for WHOIS monitoring.
+
+For the remaining registered domains, Neferpitool utilizes the more limited but highly accurate WHOIS protocol to extract critical information about the domain. This includes details such as the domain owner, registration date, and any recent changes to the domain's registration information.
+
+By combining these two protocols, Neferpitool is able to provide comprehensive and highly accurate monitoring of domain names, giving users peace of mind that they will be alerted to any changes that could potentially impact their online presence.
+
+In addition to its comprehensive domain name monitoring capabilities, Neferpitool can also be a valuable tool in the fight against phishing. Monitoring the registration information and status of all domains, including those that are recently registered or have recently changed ownership can be a critical early warning sign of a potential phishing attempt, allowing users to take proactive steps to protect themselves and their information.
+
+Furthermore, Neferpitool is built with a user-friendly CLI interface that makes it easy to set up and manage domain monitoring. It also provides detailed reports and alerts via email to ensure that users are always up-to-date on the status of their monitored domains.
+
+Overall, Neferpitool is a powerful and indispensable tool for anyone who wants to stay on top of their online presence and protect their valuable domain names.
+
 
 ## Features
 
