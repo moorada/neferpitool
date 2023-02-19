@@ -30,17 +30,32 @@ Overall, Neferpitool is a powerful and indispensable tool for anyone who wants t
 ## Install
 
 ```
-go get github.com/moorada/neferpitool/cmd
+git clone https://github.com/moorada/neferpitool.git
+cd neferpitool/cmd
+go build
 ```
 
 ## usage
 
-Add to monitoring or manage a domain
+Add to monitoring or manage a domain with the interactive prompt
 
 ```
-./Neferpitool github.com
+./cmd github.com
 
 ```
+Run Neferpitool with the interactive prompt
+
+```
+./cmd
+
+```
+Menage one specific typodomain with the interactive prompt
+
+```
+./cmd -td typodomain.example
+
+```
+
 ### Flags
 
 ```
@@ -80,15 +95,15 @@ Add to monitoring or manage a domain
 
 ```
 ### Domain states
-The state of domains varies depending on the presence of the following records DNS
+The state of typoddomains varies depending on the presence of the following DNS records:
 
 ```
 UNKNOWN: in case of errors in DNS requests;
-INACTIVE: the SOA or NS record is present, this indicates that the typodomain is no longer available for purchase.
+INACTIVE: SOA or NS record is present, this indicates that the typodomain is no longer available for purchase.
 ```
-Depending on the presence of other records, the typodomain may  go into the ALIAS or ACTIVE state;
+Depending on the presence of other records, the typodomain from INACTIVE may go into ALIAS or ACTIVE state;
 ```
-ALIAS: if it is the CNAME record is present;
+ALIAS: if the CNAME record is present;
 ACTIVE: if A, AAAA or MX records are present;
 ```
 
