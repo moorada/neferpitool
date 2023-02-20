@@ -30,7 +30,7 @@ func PrintTableErrs(errs map[string]error) {
 
 		var rows [][]string
 		for k, v := range errs {
-			row := []string{tui.Bold(k), v.Error()[0:60] + " ..."}
+			row := []string{tui.Bold(k), v.Error()}
 			rows = append(rows, row)
 		}
 		tui.Table(os.Stdout, columns, rows)
