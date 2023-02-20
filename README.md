@@ -36,6 +36,12 @@ go build
 ```
 
 ## usage
+Make the config file
+
+```
+./cmd -mc
+
+```
 
 Add to monitoring or manage a domain with the interactive prompt
 
@@ -91,7 +97,7 @@ Menage one specific typodomain with the interactive prompt
     "PATHRESOLVER": Path of DNS solver (resolv.conf)
     "HOURSLEEPBACKGROUNDMONITORING": Waiting time between total scans in background mode
     "CHECKRELIABILITYTIME": When scanning for typodomains fails or is unreliable this time is waited before rescanning
-    "REPORTFREQUENCY" Cron regex, indicates when to email the report, Model: cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow
+    "REPORTFREQUENCY" [] List of Cron regex, indicates when to email the report, Model: cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow
 
 ```
 ### Domain states
