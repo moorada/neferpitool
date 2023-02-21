@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -11,6 +9,7 @@ import (
 	"github.com/moorada/neferpitool/pkg/db"
 	"github.com/moorada/neferpitool/pkg/log"
 	"github.com/moorada/neferpitool/pkg/notification"
+	"github.com/moorada/neferpitool/pkg/reliableChanges"
 	"github.com/robfig/cron/v3"
 )
 
@@ -35,7 +34,7 @@ func background() {
 
 func backgroundWork() {
 	for _, c := range configuration.GetConf().REPORTFREQUENCY {
-		go runCronJob(c)
+		runCronJob(c)
 	}
 	start := time.Now()
 	checkChangesOfAll()
@@ -65,14 +64,10 @@ func runCronJob(expression string) {
 
 func prepareAndSendReportEmail(expression string) {
 
-	parser := cron.NewParser(cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow)
-	cronSpec, _ := parser.Parse(expression)
-	now := time.Now()
-	prev := prev(now, expression)
-
-	prevReportTime := cronSpec.Next(prev)
-
-	reliableChangesReportToSend := db.GetRelaibleChangesFromDB(prevReportTime)
+	err, reliableChangesReportToSend := db.GetRelaibleChangesFromDBWithoutExpression(expression)
+	if err != nil {
+		log.Error(err.Error())
+	}
 
 	conf := configuration.GetConf()
 
@@ -108,40 +103,46 @@ func prepareAndSendReportEmail(expression string) {
 		} else {
 			log.Info("Report sent by email")
 		}
+		for _, c := range reliableChangesReportToSend {
+			c.Crons = append(c.Crons, &reliableChanges.CronExpression{Exrpression: expression})
+			log.Info("%s", c)
+			db.SaveReliableChangeToDB(c)
+		}
+
 	} else {
 		log.Info("No email to send")
 	}
 }
 
-func prev(n time.Time, expression string) (now time.Time) {
-	now = n
-	s := strings.Split(expression, " ")
-	fmt.Println(s)
+// func prev(n time.Time, expression string) (now time.Time) {
+// 	now = n
+// 	s := strings.Split(expression, " ")
+// 	fmt.Println(s)
 
-	if s[4] != "*" {
-		now = now.AddDate(-1, 0, 0)
-		return
-	}
-	if s[3] != "*" {
-		now = now.AddDate(0, -1, 0)
-		return
-	}
-	if s[5] != "*" {
-		now = now.AddDate(0, 0, -7)
-		return
-	}
-	if s[2] != "*" {
-		now = now.AddDate(0, 0, -1)
-		return
-	}
-	if s[1] != "*" {
-		now = now.Add(-time.Hour)
-		return
-	} else {
-		now = now.Add(-time.Minute)
-		return
-	}
-}
+// 	if s[4] != "*" {
+// 		now = now.AddDate(-1, 0, 0)
+// 		return
+// 	}
+// 	if s[3] != "*" {
+// 		now = now.AddDate(0, -1, 0)
+// 		return
+// 	}
+// 	if s[5] != "*" {
+// 		now = now.AddDate(0, 0, -7)
+// 		return
+// 	}
+// 	if s[2] != "*" {
+// 		now = now.AddDate(0, 0, -1)
+// 		return
+// 	}
+// 	if s[1] != "*" {
+// 		now = now.Add(-time.Hour)
+// 		return
+// 	} else {
+// 		now = now.Add(-time.Minute)
+// 		return
+// 	}
+// }
 
 func prepareAndSendEmail() {
 
