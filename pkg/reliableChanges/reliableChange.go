@@ -14,6 +14,22 @@ type ReliableChange struct {
 	Field      string
 	Before     string
 	After      string
+	Crons      []*CronExpression `gorm:"many2many:change_crons;"`
+}
+
+type CronExpression struct {
+	gorm.Model
+	Exrpression     string
+	ReliableChanges []*ReliableChange `gorm:"many2many:change_crons;"`
+}
+
+func Contains(s []*CronExpression, e string) bool {
+	for _, a := range s {
+		if a.Exrpression == e {
+			return true
+		}
+	}
+	return false
 }
 
 type ReliableChangeList []ReliableChange
@@ -72,7 +88,7 @@ func (tdcs ReliableChangeList) changesWhoisToTable() ([]string, [][]string) {
 	}
 	var dataWithoutGormModel [][]string
 	for _, r := range data {
-		dataWithoutGormModel = append(dataWithoutGormModel, r[1:])
+		dataWithoutGormModel = append(dataWithoutGormModel, r[1:4])
 	}
 
 	return headers, dataWithoutGormModel
