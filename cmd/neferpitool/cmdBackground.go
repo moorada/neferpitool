@@ -14,12 +14,12 @@ import (
 )
 
 func background() {
+	backgroundWork()
 	timeToSleepBackground := time.Duration(configuration.GetConf().HOURSLEEPBACKGROUNDMONITORING) * time.Hour
 	mds := db.GetMainDomainListFromDB()
 	if len(mds) != 0 {
 		for {
 			log.Info("Monotoring...")
-			backgroundWork()
 			s := spinner.New(spinner.CharSets[26], 200*time.Millisecond) // Build our new spinner
 			s.Prefix = "Sleeping "
 			s.Start()
@@ -50,10 +50,9 @@ func backgroundWork() {
 }
 
 func runCronJob(expression string) {
-
-	parser := cron.NewParser(cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow)
-	c := cron.New(cron.WithParser(parser))
+	c := cron.New()
 	_, err := c.AddFunc(expression, func() { prepareAndSendReportEmail(expression) })
+
 	if err != nil {
 		log.Error("Cron error with cron %s: %s", expression, err)
 	} else {
@@ -63,7 +62,6 @@ func runCronJob(expression string) {
 }
 
 func prepareAndSendReportEmail(expression string) {
-
 	err, reliableChangesReportToSend := db.GetRelaibleChangesFromDBWithoutExpression(expression)
 	if err != nil {
 		log.Error(err.Error())
