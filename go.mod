@@ -31,7 +31,7 @@ require (
 	github.com/spf13/cobra v0.0.5 // indirect
 	github.com/tkanos/gonfig v0.0.0-20181112185242-896f3d81fadf
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa // indirect
-	golang.org/x/net v0.6.0
+	golang.org/x/net v0.7.0
 	golang.org/x/tools v0.3.0 // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 
