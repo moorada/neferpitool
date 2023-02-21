@@ -56,7 +56,7 @@ func initConf() {
 	configuration := configuration{}
 	err := gonfig.GetConf(pathConfig, &configuration)
 	if err != nil {
-		log.Debug("Basic configuration")
+		log.Debug("Basic configuration, err: %s", err)
 	} else {
 		log.Debug("configuration by file")
 		standardConf = configuration

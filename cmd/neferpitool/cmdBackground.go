@@ -14,12 +14,15 @@ import (
 )
 
 func background() {
-	backgroundWork()
 	timeToSleepBackground := time.Duration(configuration.GetConf().HOURSLEEPBACKGROUNDMONITORING) * time.Hour
+	for _, c := range configuration.GetConf().REPORTFREQUENCY {
+		runCronJob(c)
+	}
 	mds := db.GetMainDomainListFromDB()
-	if len(mds) != 0 {
+	if len(mds) > 0 {
 		for {
 			log.Info("Monotoring...")
+			backgroundWork()
 			s := spinner.New(spinner.CharSets[26], 200*time.Millisecond) // Build our new spinner
 			s.Prefix = "Sleeping "
 			s.Start()
@@ -33,9 +36,6 @@ func background() {
 }
 
 func backgroundWork() {
-	for _, c := range configuration.GetConf().REPORTFREQUENCY {
-		runCronJob(c)
-	}
 	start := time.Now()
 	checkChangesOfAll()
 	if len(changesToSend) > 0 {

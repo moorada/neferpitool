@@ -5,7 +5,6 @@ import (
 	"github.com/moorada/neferpitool/pkg/changes"
 	"github.com/moorada/neferpitool/pkg/db"
 	"github.com/moorada/neferpitool/pkg/log"
-	"github.com/moorada/neferpitool/pkg/reliableChanges"
 	"github.com/moorada/neferpitool/pkg/stats"
 )
 
@@ -43,18 +42,7 @@ func MonitorCmd() {
 }
 
 func test() {
-	change := reliableChanges.ReliableChange{TypoDomain: "examplesie.neferpitool", Field: "a", Before: "bla", After: "adsa"}
-	db.AddReliableChangeToDB(change)
-
-	err, changes := db.GetRelaibleChangesFromDBWithoutExpression("dasdsada")
-
-	if err != nil {
-		log.Error("Error: %s", err)
-	}
-
-	changes[0].Crons = append(changes[0].Crons, &reliableChanges.CronExpression{Exrpression: "expresssioooodsdsan"})
-	log.Info("%s", changes[0])
-	db.SaveReliableChangeToDB(changes[0])
+	log.Info("Empty")
 
 }
 
