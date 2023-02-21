@@ -14,7 +14,7 @@ import (
 )
 
 func background() {
-	timeToSleepBackground := time.Duration(configuration.GetConf().HOURSLEEPBACKGROUNDMONITORING) * time.Hour
+	timeToSleepBackground := time.Duration(configuration.GetConf().MINUTESLEEPBACKGROUNDMONITORING) * time.Minute
 	for _, c := range configuration.GetConf().REPORTFREQUENCY {
 		runCronJob(c)
 	}
