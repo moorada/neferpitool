@@ -4,3 +4,6 @@
 *.db
 *.import
 !.gitignore
+vendor
+cmd/cmd
+.idea
