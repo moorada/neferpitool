@@ -10,20 +10,20 @@ import (
 )
 
 type configuration struct {
-	TYPOSALGHORITM                []string
-	EXPIRATIONTIME                int
-	MAXATTEMPTSWHOIS              int
-	MAXATTEMPTSSOA                int
-	TIMETOSLEEPWHOIS              int
-	TIMETOSLEEPSOA                int
-	EMAIL                         string
-	PASSWORD                      string
-	EMAILTONOTIFY                 []string
-	SHOWSTATUS                    []string
-	PATHRESOLVER                  string
-	HOURSLEEPBACKGROUNDMONITORING int
-	CHECKRELIABILITYTIME          int
-	REPORTFREQUENCY               []string
+	TYPOSALGHORITM                  []string
+	EXPIRATIONTIME                  int
+	MAXATTEMPTSWHOIS                int
+	MAXATTEMPTSSOA                  int
+	TIMETOSLEEPWHOIS                int
+	TIMETOSLEEPSOA                  int
+	EMAIL                           string
+	PASSWORD                        string
+	EMAILTONOTIFY                   []string
+	SHOWSTATUS                      []string
+	PATHRESOLVER                    string
+	MINUTESLEEPBACKGROUNDMONITORING int
+	CHECKRELIABILITYTIME            int
+	REPORTFREQUENCY                 []string
 }
 
 const (
@@ -34,20 +34,20 @@ var (
 	initVar bool
 
 	standardConf = configuration{
-		TYPOSALGHORITM:                []string{"all"},
-		EXPIRATIONTIME:                7,
-		MAXATTEMPTSWHOIS:              2,
-		MAXATTEMPTSSOA:                2,
-		TIMETOSLEEPWHOIS:              2000,
-		TIMETOSLEEPSOA:                100,
-		EMAIL:                         "",
-		PASSWORD:                      "",
-		EMAILTONOTIFY:                 []string{},
-		SHOWSTATUS:                    []string{"Inactive", "Active", "Available", "Unknown", "Alias"},
-		PATHRESOLVER:                  "./config/resolv.conf",
-		HOURSLEEPBACKGROUNDMONITORING: 1,
-		CHECKRELIABILITYTIME:          2000,
-		REPORTFREQUENCY:               []string{"0 30 9 * * *"},
+		TYPOSALGHORITM:                  []string{"all"},
+		EXPIRATIONTIME:                  7,
+		MAXATTEMPTSWHOIS:                2,
+		MAXATTEMPTSSOA:                  2,
+		TIMETOSLEEPWHOIS:                2000,
+		TIMETOSLEEPSOA:                  100,
+		EMAIL:                           "",
+		PASSWORD:                        "",
+		EMAILTONOTIFY:                   []string{},
+		SHOWSTATUS:                      []string{"Inactive", "Active", "Available", "Unknown", "Alias"},
+		PATHRESOLVER:                    "./config/resolv.conf",
+		MINUTESLEEPBACKGROUNDMONITORING: 1,
+		CHECKRELIABILITYTIME:            2000,
+		REPORTFREQUENCY:                 []string{"0 0/4 * * * "},
 	}
 )
 
