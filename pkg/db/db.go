@@ -24,6 +24,7 @@ func InitDB(nameDB string) {
 	db.AutoMigrate(&domains.TypoDomain{})
 	db.AutoMigrate(&reliableChanges.ReliableChange{})
 	db.AutoMigrate(&reliableChanges.CronExpression{})
+
 }
 
 func CloseDB() {

@@ -67,12 +67,17 @@ func checkChanges(tds domains.TypoList) bool {
 
 	tdsChanged, changes := iterateCheckGetChanges(tds)
 
+	var Crons = []*reliableChanges.CronExpression{}
+	for _, c := range configuration.GetConf().REPORTFREQUENCY {
+		Crons = append(Crons, &reliableChanges.CronExpression{Exrpression: c})
+	}
+
 	if changes != nil {
 
 		var rChanges []reliableChanges.ReliableChange
 
 		for _, c := range changes {
-			rChanges = append(rChanges, reliableChanges.ReliableChange{TypoDomain: c.TypoDomain, Field: c.Field, Before: c.Before, After: c.After})
+			rChanges = append(rChanges, reliableChanges.ReliableChange{TypoDomain: c.TypoDomain, Field: c.Field, Before: c.Before, After: c.After, Crons: Crons})
 		}
 		db.AddReliableChangeListToDB(rChanges)
 

@@ -43,7 +43,6 @@ func MonitorCmd() {
 
 func test() {
 	log.Info("Empty")
-
 }
 
 func manageDomains() {

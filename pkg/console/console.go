@@ -10,6 +10,7 @@ import (
 
 	"github.com/moorada/neferpitool/pkg/configuration"
 	"github.com/moorada/neferpitool/pkg/log"
+	"github.com/moorada/neferpitool/pkg/reliableChanges"
 
 	"github.com/moorada/neferpitool/pkg/changes"
 	"github.com/moorada/neferpitool/pkg/domains"
@@ -30,6 +31,10 @@ func PrintTableErrs(errs map[string]error) {
 
 		var rows [][]string
 		for k, v := range errs {
+			er := v.Error()
+			if len(er) > 60 {
+				er = er[:60]
+			}
 			row := []string{tui.Bold(k), v.Error()}
 			rows = append(rows, row)
 		}
@@ -110,6 +115,37 @@ func limitLen(s string, i int) string {
 }
 
 func PrintChanges(changes changes.ChangeList) {
+
+	if !tui.Effects() {
+		log.Info("Tui effects not available on this terminal.\n")
+		log.Info("%-20s |%-20s | %-35s | %-35s |\n", "TYPODOMAIN", "FIELD CHANGED", "BEFORE", "AFTER")
+		for _, c := range changes {
+			log.Info("%-20s | %-35s | %-35s |%-35s |\n", c.TypoDomain, c.Field, c.Before, c.After)
+		}
+	} else {
+		columns := []string{
+			"Typodomain",
+			"Field changed",
+			"Before",
+			"After",
+		}
+
+		var rows [][]string
+		for _, c := range changes {
+			row := []string{tui.Bold(c.TypoDomain), c.Field, c.Before, c.After}
+			rows = append(rows, row)
+		}
+		tui.Table(os.Stdout, columns, rows)
+	}
+
+	log.Debug("Table logs debug.\n")
+	log.Debug("%-20s |%-20s | %-35s | %-35s |\n", "TYPODOMAIN", "FIELD CHANGED", "BEFORE", "AFTER")
+	for _, c := range changes {
+		log.Debug("%-20s | %-35s | %-35s |%-35s |\n", c.TypoDomain, c.Field, c.Before, c.After)
+	}
+}
+
+func PrintReliableChanges(changes reliableChanges.ReliableChangeList) {
 
 	if !tui.Effects() {
 		log.Info("Tui effects not available on this terminal.\n")

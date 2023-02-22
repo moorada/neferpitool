@@ -62,7 +62,7 @@ func runCronJob(expression string) {
 }
 
 func prepareAndSendReportEmail(expression string) {
-	err, reliableChangesReportToSend := db.GetRelaibleChangesFromDBWithoutExpression(expression)
+	err, reliableChangesReportToSend := db.GetRelaibleChangesFromDBWithExpression(expression)
 	if err != nil {
 		log.Error(err.Error())
 	}
@@ -102,45 +102,16 @@ func prepareAndSendReportEmail(expression string) {
 			log.Info("Report sent by email")
 		}
 		for _, c := range reliableChangesReportToSend {
-			c.Crons = append(c.Crons, &reliableChanges.CronExpression{Exrpression: expression})
-			log.Info("%s", c)
-			db.SaveReliableChangeToDB(c)
+			i := reliableChanges.Contains(c.Crons, expression)
+			if i >= 0 {
+				db.DeleteExprToChDB(c, *c.Crons[i])
+			}
 		}
 
 	} else {
 		log.Info("No email to send")
 	}
 }
-
-// func prev(n time.Time, expression string) (now time.Time) {
-// 	now = n
-// 	s := strings.Split(expression, " ")
-// 	fmt.Println(s)
-
-// 	if s[4] != "*" {
-// 		now = now.AddDate(-1, 0, 0)
-// 		return
-// 	}
-// 	if s[3] != "*" {
-// 		now = now.AddDate(0, -1, 0)
-// 		return
-// 	}
-// 	if s[5] != "*" {
-// 		now = now.AddDate(0, 0, -7)
-// 		return
-// 	}
-// 	if s[2] != "*" {
-// 		now = now.AddDate(0, 0, -1)
-// 		return
-// 	}
-// 	if s[1] != "*" {
-// 		now = now.Add(-time.Hour)
-// 		return
-// 	} else {
-// 		now = now.Add(-time.Minute)
-// 		return
-// 	}
-// }
 
 func prepareAndSendEmail() {
 

@@ -18,13 +18,13 @@ func GetRelaibleChangesFromDB() (err error, changes reliableChanges.ReliableChan
 	return
 }
 
-func GetRelaibleChangesFromDBWithoutExpression(expression string) (err error, changes reliableChanges.ReliableChangeList) {
+func GetRelaibleChangesFromDBWithExpression(expression string) (err error, changes reliableChanges.ReliableChangeList) {
 
 	var changesTemp reliableChanges.ReliableChangeList
 	err = db.Model(&reliableChanges.ReliableChange{}).Preload("Crons").Find(&changesTemp).Error
 
 	for _, c := range changesTemp {
-		if !reliableChanges.Contains(c.Crons, expression) {
+		if reliableChanges.Contains(c.Crons, expression) >= 0 {
 			changes = append(changes, c)
 		}
 	}
@@ -32,11 +32,11 @@ func GetRelaibleChangesFromDBWithoutExpression(expression string) (err error, ch
 	return
 }
 
-func contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
+func DeleteExprToChDB(rc reliableChanges.ReliableChange, cron reliableChanges.CronExpression) {
+	db.Model(&rc).Association("Crons").Delete(cron)
+}
+
+func GetCronExpressionFromDB() (err error, changes reliableChanges.ReliableChangeList) {
+	err = db.Model(&reliableChanges.ReliableChange{}).Preload("Crons").Find(&changes).Error
+	return
 }

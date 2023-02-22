@@ -2,6 +2,7 @@ package reliableChanges
 
 import (
 	"reflect"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	"github.com/moorada/neferpitool/pkg/log"
@@ -23,13 +24,23 @@ type CronExpression struct {
 	ReliableChanges []*ReliableChange `gorm:"many2many:change_crons;"`
 }
 
-func Contains(s []*CronExpression, e string) bool {
-	for _, a := range s {
+type ChangeCron struct {
+	CronID    uint `gorm:"primaryKey"`
+	RChangeID uint `gorm:"primaryKey"`
+	Notified  bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index"`
+}
+
+func Contains(s []*CronExpression, e string) int {
+
+	for i, a := range s {
 		if a.Exrpression == e {
-			return true
+			return i
 		}
 	}
-	return false
+	return -1
 }
 
 type ReliableChangeList []ReliableChange
