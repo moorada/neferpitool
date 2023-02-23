@@ -14,6 +14,6 @@ COPY etc/bind/named.conf.options /etc/bind/
 COPY etc/bind/named.conf.local /etc/bind/
 COPY etc/bind/zones/db.test-neferpitool.com /etc/bind/zones/
 COPY etc/bind/zones/db.neferpitool /etc/bind/zones/
-
+COPY etc/bind/zones/db2.neferpitool /etc/bind/zones/
 # Run eternal loop
 CMD ["/bin/bash", "-c", "while :; do sleep 10; done"]

@@ -36,7 +36,8 @@ func DeleteExprToChDB(rc reliableChanges.ReliableChange, cron reliableChanges.Cr
 	db.Model(&rc).Association("Crons").Delete(cron)
 }
 
-func GetCronExpressionFromDB() (err error, changes reliableChanges.ReliableChangeList) {
-	err = db.Model(&reliableChanges.ReliableChange{}).Preload("Crons").Find(&changes).Error
-	return
+func GetCronExpressionFromDB(expression string) reliableChanges.CronExpression {
+	var cron reliableChanges.CronExpression
+	db.Where("exrpression = ?", expression).Last(&cron)
+	return cron
 }

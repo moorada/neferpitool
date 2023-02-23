@@ -69,7 +69,13 @@ func checkChanges(tds domains.TypoList) bool {
 
 	var Crons = []*reliableChanges.CronExpression{}
 	for _, c := range configuration.GetConf().REPORTFREQUENCY {
-		Crons = append(Crons, &reliableChanges.CronExpression{Exrpression: c})
+
+		cc := db.GetCronExpressionFromDB(c)
+		if cc.ID != 0 {
+			Crons = append(Crons, &cc)
+		} else {
+			Crons = append(Crons, &reliableChanges.CronExpression{Exrpression: c})
+		}
 	}
 
 	if changes != nil {

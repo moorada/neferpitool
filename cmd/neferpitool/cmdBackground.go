@@ -79,7 +79,7 @@ func prepareAndSendReportEmail(expression string) {
 			From:     conf.EMAIL,
 			Password: conf.PASSWORD,
 			To:       conf.EMAILTONOTIFY,
-			Subject:  "domain monitoring - Report of the day",
+			Subject:  "domain monitoring - Report of the day - Expression: " + expression,
 		}
 
 		tpl := notification.TemplateData{
@@ -99,7 +99,7 @@ func prepareAndSendReportEmail(expression string) {
 		if err != nil {
 			log.Error(err.Error())
 		} else {
-			log.Info("Report sent by email")
+			log.Info("Report sent by email, Expression: %s", expression)
 		}
 		for _, c := range reliableChangesReportToSend {
 			i := reliableChanges.Contains(c.Crons, expression)

@@ -1,15 +1,10 @@
-## TO DO
-
-## We specify the base image we need for our
-FROM ubuntu:latest 
-## We create an /app directory within our
-## image that will hold our application source
-## files
-RUN mkdir /app
-## We copy everything in the root directory
-## into our /app directory
-ADD . /app
-## We specify that we now wish to execute 
-## any further commands inside our /app
-
-WORKDIR /app/cmd/
+FROM debian
+WORKDIR /app
+RUN echo "deb http://ftp.debian.org/debian sid main" >> /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get install -y libc6 libc-bin
+RUN apt-get install -y wget
+RUN wget https://XXXX_NEFERPITOOL_
+RUN chmod +x ./cmd/cmd
+ENTRYPOINT ["./neferpitool"]
+CMD ["-h"]

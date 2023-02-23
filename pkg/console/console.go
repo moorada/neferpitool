@@ -35,7 +35,7 @@ func PrintTableErrs(errs map[string]error) {
 			if len(er) > 60 {
 				er = er[:60]
 			}
-			row := []string{tui.Bold(k), v.Error()}
+			row := []string{tui.Bold(k), er}
 			rows = append(rows, row)
 		}
 		tui.Table(os.Stdout, columns, rows)
