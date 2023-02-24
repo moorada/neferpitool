@@ -17,7 +17,7 @@ func SingleTdMode(typodomain string) {
 
 		prompt := promptui.Select{
 			Label: "TypoDomain in the Database",
-			Items: []string{"Look at his history", "Check changes"},
+			Items: []string{"Look at his history", "Check changes", "Delete"},
 		}
 
 		_, result, err := prompt.Run()
@@ -32,11 +32,12 @@ func SingleTdMode(typodomain string) {
 			console.PrintTableTypoDomains(db.GetTypoDomainHistoryFromDB(typodomain))
 		case "Check changes":
 			checkChanges([]domains.TypoDomain{db.GetTypoDomainFromDB(typodomain)})
+		case "Delete":
+			db.RemoveTypoDomainFromDB(typodomain)
 		}
 		log.Info("You choose %q\n", result)
 	} else {
 		log.Info("This typodomain isn't in the database")
-		updateTypo(typodomain)
 	}
 }
 

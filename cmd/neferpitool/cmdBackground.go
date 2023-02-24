@@ -51,7 +51,10 @@ func backgroundWork() {
 
 func runCronJob(expression string) {
 	c := cron.New()
-	_, err := c.AddFunc(expression, func() { prepareAndSendReportEmail(expression) })
+	_, err := c.AddFunc(expression, func() {
+		log.Info("Cron %s started", expression)
+		prepareAndSendReportEmail(expression)
+	})
 
 	if err != nil {
 		log.Error("Cron error with cron %s: %s", expression, err)

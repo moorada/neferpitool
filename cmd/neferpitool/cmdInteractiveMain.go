@@ -1,11 +1,15 @@
 package cmd
 
 import (
+	"time"
+
 	"github.com/manifoldco/promptui"
 	"github.com/moorada/neferpitool/pkg/changes"
+	"github.com/moorada/neferpitool/pkg/configuration"
 	"github.com/moorada/neferpitool/pkg/db"
 	"github.com/moorada/neferpitool/pkg/log"
 	"github.com/moorada/neferpitool/pkg/stats"
+	"github.com/robfig/cron/v3"
 )
 
 var changesToSend changes.ChangeList
@@ -42,6 +46,14 @@ func MonitorCmd() {
 }
 
 func test() {
+	parser := cron.NewParser(cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow)
+
+	for _, c := range configuration.GetConf().REPORTFREQUENCY {
+		cronSpec, _ := parser.Parse(c)
+		log.Info("%s", cronSpec.Next(time.Now()))
+	}
+	cronSpec, _ := parser.Parse("*/30 * * * *")
+	log.Info("%s", cronSpec.Next(time.Now()))
 
 }
 
