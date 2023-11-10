@@ -19,7 +19,7 @@ require (
 	github.com/likexian/whois-parser-go v0.0.0-20190429170710-0aa0498833b2
 	github.com/manifoldco/promptui v0.3.2
 	github.com/mattn/go-sqlite3 v1.11.0
-	github.com/miekg/dns v1.1.18
+	github.com/miekg/dns v1.1.25
 	github.com/moorada/log v0.0.0-20190925205337-ea8e98779d11
 	github.com/moorada/whois v0.0.0-20190925202157-27c8af21b8ad
 	github.com/nicksnyder/go-i18n v1.10.1 // indirect
