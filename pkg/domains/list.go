@@ -19,11 +19,11 @@ func (a TypoList) Less(i, j int) bool {
 
 	date1, err := a[i].GetExpiryDate()
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	}
 	date2, err := a[j].GetExpiryDate()
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	}
 	return date1.Before(date2)
 }
@@ -76,7 +76,7 @@ func (tdl TypoList) FilterInExpiration(d int) TypoList {
 		//if td.Whois != "" {
 		/*w, err := td.GetWhois()
 		if err != nil {
-			log.Error(err.Error())
+			log.Error("%s", err.Error())
 		}
 		*/
 		w := td.Whois

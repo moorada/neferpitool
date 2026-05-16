@@ -43,14 +43,14 @@ func (td TypoDomain) IsEqual(td2 TypoDomain) bool {
 func (td TypoDomain) PrintShort() {
 	//w, err := td.GetWhois()
 	/*if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	} else {*/
 	w := td.GetWhois()
 	timeString := ""
 	if w.Parsed.Registrar.ExpirationDate != "" {
 		expiration, err := format.StringToTime(w.Parsed.Registrar.ExpirationDate)
 		if err != nil {
-			log.Error(err.Error())
+			log.Error("%s", err.Error())
 		}
 		timeString = format.TimeToStringConsole(expiration)
 	}
@@ -59,10 +59,11 @@ func (td TypoDomain) PrintShort() {
 	p = idna.New()
 	nameUnicode, err := p.ToUnicode(td.Name)
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 		nameUnicode = td.Name
 	}
-	log.Info("%-20s |%-15s | %-15s | %-20s | %-25s | %-20s | %-25s | %-20s", td.Name, td.StatusToString(), td.Algorithm, td.LegitDomain, w.Parsed.Registrar.RegistrarName, timeString, nameUnicode, td.CreatedAt.Format("02/01/2006 15:04"))
+	registrar := format.LimitDisplayWidth(w.Parsed.Registrar.RegistrarName, 25)
+	log.Info("%-20s |%-15s | %-15s | %-20s | %-25s | %-20s | %-25s | %-20s", td.Name, td.StatusToString(), td.Algorithm, td.LegitDomain, registrar, timeString, nameUnicode, td.CreatedAt.Format("02/01/2006 15:04"))
 	//}
 
 }
@@ -71,14 +72,14 @@ func (td TypoDomain) PrintShort() {
 func (td TypoDomain) PrintShortDebug() {
 	/*w, err := td.GetWhois()
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	} else {*/
 	w := td.GetWhois()
 	timeString := ""
 	if w.Parsed.Registrar.ExpirationDate != "" {
 		expiration, err := format.StringToTime(w.Parsed.Registrar.ExpirationDate)
 		if err != nil {
-			log.Error(err.Error())
+			log.Error("%s", err.Error())
 		}
 		timeString = format.TimeToStringConsole(expiration)
 	}
@@ -87,10 +88,11 @@ func (td TypoDomain) PrintShortDebug() {
 	p = idna.New()
 	nameUnicode, err := p.ToUnicode(td.Name)
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 		nameUnicode = td.Name
 	}
-	log.Debug("%-20s |%-15s | %-15s | %-20s | %-25s | %-20s | %-25s | %-20s", td.Name, td.StatusToString(), td.Algorithm, td.LegitDomain, w.Parsed.Registrar.RegistrarName, timeString, nameUnicode, td.CreatedAt.Format("02/01/2006 15:04"))
+	registrar := format.LimitDisplayWidth(w.Parsed.Registrar.RegistrarName, 25)
+	log.Debug("%-20s |%-15s | %-15s | %-20s | %-25s | %-20s | %-25s | %-20s", td.Name, td.StatusToString(), td.Algorithm, td.LegitDomain, registrar, timeString, nameUnicode, td.CreatedAt.Format("02/01/2006 15:04"))
 	//}
 
 }

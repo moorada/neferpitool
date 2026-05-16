@@ -3,6 +3,7 @@ package whois
 import (
 	"encoding/json"
 	"strconv"
+	"strings"
 	"time"
 
 	whoisparser "github.com/likexian/whois-parser-go"
@@ -56,7 +57,7 @@ func Get(domain string) (Whois, error, time.Duration) {
 			log.Debug("%s %s %s", "Error whois Parsing for domain:", domain, err.Error())
 
 		} else {
-			registrar := makeRegistrar(whoisParsed.Registrar)
+			registrar := makeRegistrar(whoisParsed.Domain, whoisParsed.Registrar)
 			registrant := makeRegistrant(whoisParsed.Registrant)
 			parsed = Parsed{
 				Registrant: registrant,
@@ -75,7 +76,7 @@ func Get(domain string) (Whois, error, time.Duration) {
 func (w Whois) ToJson() []byte {
 	whoisinfoMarshalled, err := json.Marshal(w)
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	}
 	return whoisinfoMarshalled
 }
@@ -94,43 +95,51 @@ func (w Whois) String() string {
 	return string(w.ToJson())
 }
 
-func makeRegistrar(r whoisparser.Registrar) Registrar {
+func makeRegistrar(domain *whoisparser.Domain, registrarContact *whoisparser.Contact) Registrar {
+	if domain == nil {
+		domain = &whoisparser.Domain{}
+	}
+	if registrarContact == nil {
+		registrarContact = &whoisparser.Contact{}
+	}
 
 	registrar := Registrar{
-		RegistrarID:    r.RegistrarID,
-		RegistrarName:  r.RegistrarName,
-		WhoisServer:    r.WhoisServer,
-		ReferralURL:    r.ReferralURL,
-		DomainId:       r.DomainId,
-		DomainName:     r.DomainName,
-		DomainStatus:   r.DomainStatus,
-		NameServers:    r.NameServers,
-		DomainDNSSEC:   r.DomainDNSSEC,
-		CreatedDate:    r.CreatedDate,
-		UpdatedDate:    r.UpdatedDate,
-		ExpirationDate: r.ExpirationDate,
+		RegistrarID:    registrarContact.ID,
+		RegistrarName:  registrarContact.Name,
+		WhoisServer:    domain.WhoisServer,
+		ReferralURL:    registrarContact.ReferralURL,
+		DomainId:       domain.ID,
+		DomainName:     domain.Domain,
+		DomainStatus:   strings.Join(domain.Status, ","),
+		NameServers:    strings.Join(domain.NameServers, ","),
+		DomainDNSSEC:   strconv.FormatBool(domain.DnsSec),
+		CreatedDate:    domain.CreatedDate,
+		UpdatedDate:    domain.UpdatedDate,
+		ExpirationDate: domain.ExpirationDate,
 	}
 	return registrar
 
 }
 
-func makeRegistrant(r whoisparser.Registrant) Registrant {
+func makeRegistrant(registrantContact *whoisparser.Contact) Registrant {
+	if registrantContact == nil {
+		return Registrant{}
+	}
 
 	registrant := Registrant{
-		RegistrantID:   r.ID,
-		RegistrantName: r.Name,
-		Organization:   r.Organization,
-		Street:         r.Street,
-		StreetExt:      r.StreetExt,
-		City:           r.City,
-		Province:       r.Province,
-		PostalCode:     r.PostalCode,
-		Country:        r.Country,
-		Phone:          r.Phone,
-		PhoneExt:       r.PhoneExt,
-		Fax:            r.Fax,
-		FaxExt:         r.FaxExt,
-		Email:          r.Email,
+		RegistrantID:   registrantContact.ID,
+		RegistrantName: registrantContact.Name,
+		Organization:   registrantContact.Organization,
+		Street:         registrantContact.Street,
+		City:           registrantContact.City,
+		Province:       registrantContact.Province,
+		PostalCode:     registrantContact.PostalCode,
+		Country:        registrantContact.Country,
+		Phone:          registrantContact.Phone,
+		PhoneExt:       registrantContact.PhoneExt,
+		Fax:            registrantContact.Fax,
+		FaxExt:         registrantContact.FaxExt,
+		Email:          registrantContact.Email,
 	}
 	return registrant
 }

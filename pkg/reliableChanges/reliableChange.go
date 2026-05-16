@@ -61,7 +61,7 @@ func (tdcs ReliableChangeList) ToTables() (headersAvailability []string, datasSt
 		p = idna.New()
 		nameUnicode, err := p.ToUnicode(ch.TypoDomain)
 		if err != nil {
-			log.Error("error to convert in unicode %s:", ch.TypoDomain, err.Error())
+			log.Error("error to convert in unicode %s: %s", ch.TypoDomain, err.Error())
 			nameUnicode = ch.TypoDomain
 		}
 

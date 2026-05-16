@@ -38,7 +38,13 @@ func SingleDomainMode(domain string) {
 	} else {
 
 		log.Info("This domain isn't in the database")
-		addDomainAndHisTypos(domain)
-		console.PrintTableTypoDomains(db.GetTypoDomainListFromDB(domain))
+		tds, errs, err := addDomainAndHisTypos(domain)
+		if err != nil {
+			log.Error("%s, error: %s", domain, err.Error())
+		}
+		if len(errs) != 0 {
+			console.PrintTableErrs(errs)
+		}
+		console.PrintTableTypoDomains(tds)
 	}
 }

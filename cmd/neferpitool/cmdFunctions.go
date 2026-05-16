@@ -1,18 +1,13 @@
 package cmd
 
 import (
-	"time"
-
-	"github.com/briandowns/spinner"
+	"github.com/cheggaaa/pb/v3"
 	"github.com/manifoldco/promptui"
 	"github.com/moorada/neferpitool/pkg/changes"
-	"github.com/moorada/neferpitool/pkg/configuration"
 	"github.com/moorada/neferpitool/pkg/console"
-	"github.com/moorada/neferpitool/pkg/constants"
 	"github.com/moorada/neferpitool/pkg/db"
 	"github.com/moorada/neferpitool/pkg/domains"
 	"github.com/moorada/neferpitool/pkg/log"
-	"github.com/moorada/neferpitool/pkg/reliableChanges"
 )
 
 func checkForChanges() {
@@ -67,26 +62,8 @@ func checkChanges(tds domains.TypoList) bool {
 
 	tdsChanged, changes := iterateCheckGetChanges(tds)
 
-	var Crons = []*reliableChanges.CronExpression{}
-	for _, c := range configuration.GetConf().REPORTFREQUENCY {
-
-		cc := db.GetCronExpressionFromDB(c)
-		if cc.ID != 0 {
-			Crons = append(Crons, &cc)
-		} else {
-			Crons = append(Crons, &reliableChanges.CronExpression{Exrpression: c})
-		}
-	}
-
 	if changes != nil {
-
-		var rChanges []reliableChanges.ReliableChange
-
-		for _, c := range changes {
-			rChanges = append(rChanges, reliableChanges.ReliableChange{TypoDomain: c.TypoDomain, Field: c.Field, Before: c.Before, After: c.After, Crons: Crons})
-		}
-		db.AddReliableChangeListToDB(rChanges)
-
+		monitorService.SaveReliableChanges(changes)
 		db.AddTypoListToDB(tdsChanged)
 		console.PrintChanges(changes)
 		changesToSend = append(changesToSend, changes...)
@@ -98,45 +75,31 @@ func checkChanges(tds domains.TypoList) bool {
 }
 
 func iterateCheckGetChanges(tds domains.TypoList) (tdsReliable []domains.TypoDomain, changesReliable []changes.Change) {
+	errs := map[string]error{}
+	var bar *pb.ProgressBar
+	progress := func(done, total int) {
+		if total == 0 {
+			return
+		}
+		if done == 1 {
+			bar = pb.Full.Start(total)
+		}
+		if bar != nil {
+			bar.SetCurrent(int64(done))
+			if done == total {
+				bar.Finish()
+				bar = nil
+			}
+		}
+	}
 
-	tdsNew := tds.GetUnfilledCopy()
-	errs := UpdateTypoDomainsWithProgressBar(tdsNew)
+	tdsReliable, changesReliable, errs = monitorService.IterateCheckGetChanges(tds, progress)
 	if len(errs) > 0 {
 		console.PrintTableErrs(errs)
 	}
-	tdsOldCh, tdsNewCh, chs := changes.MakeChangeList(tds, tdsNew)
-	for i := 0; i < 2 && len(tdsOldCh) > 0; i++ {
-		log.Info("Checking reliability about %v changes", len(chs))
-		s := spinner.New(spinner.CharSets[26], 200*time.Millisecond) // Build our new spinner
-		s.Prefix = "Sleeping "
-		s.Start()
-		time.Sleep(time.Duration(configuration.GetConf().CHECKRELIABILITYTIME) * time.Millisecond)
-		s.Stop()
-		errs := UpdateTypoDomainsWithProgressBar(tdsNewCh)
-		if len(errs) > 0 {
-			console.PrintTableErrs(errs)
-		}
-		tdsOldChNext, tdsNewChNext, chsNext := changes.MakeChangeList(tdsOldCh, tdsNewCh)
-		tdsReliable, changesReliable = chsNext.FilterReliableWithPrev(chs, tdsNewCh, tdsNewChNext)
-		tdsOldCh, tdsNewCh, chs = tdsOldChNext, tdsReliable, changesReliable
-	}
-
 	return tdsReliable, changesReliable
 }
 
 func getTypoDomainsInExpiration() domains.TypoList {
-
-	var totalTdInExpiration domains.TypoList
-
-	ds := db.GetMainDomainListFromDB()
-
-	for _, d := range ds {
-		exp := configuration.GetConf().EXPIRATIONTIME
-		tdt := db.GetTypoDomainListWithStatusFromDB(d.Name, []int{constants.INACTIVE, constants.ACTIVE, constants.ALIAS})
-		tds := tdt.FilterInExpiration(exp)
-		totalTdInExpiration = append(totalTdInExpiration, tds...)
-	}
-
-	return totalTdInExpiration
-
+	return monitorService.GetTypoDomainsInExpiration()
 }

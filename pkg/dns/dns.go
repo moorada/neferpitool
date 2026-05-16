@@ -113,7 +113,7 @@ func isThereRecord(d string, recordType uint16) (ok bool, recordValue string, er
 	if err != nil {
 		config, err = dns.ClientConfigFromFile("/etc/resolv.conf")
 		if err != nil {
-			log.Fatal(err.Error())
+			log.Fatal("%s", err.Error())
 		}
 	}
 	c := new(dns.Client)

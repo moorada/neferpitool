@@ -27,7 +27,7 @@ func EmailChanges(tpl TemplateData, req Request) (err error) {
 		err = req.parseTemplateString(tpl)
 	}
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal("%s", err.Error())
 	} else {
 		ok, err := req.sendEmail()
 		if !ok {
@@ -59,7 +59,7 @@ func EmailReport(tpl TemplateData, req Request) (err error) {
 		err = req.parseTemplateString(tpl)
 	}
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal("%s", err.Error())
 	} else {
 		ok, err := req.sendEmail()
 		if !ok {

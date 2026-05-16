@@ -9,6 +9,7 @@ import (
 	"github.com/evilsocket/islazy/tui"
 
 	"github.com/moorada/neferpitool/pkg/configuration"
+	"github.com/moorada/neferpitool/pkg/format"
 	"github.com/moorada/neferpitool/pkg/log"
 	"github.com/moorada/neferpitool/pkg/reliableChanges"
 
@@ -31,10 +32,7 @@ func PrintTableErrs(errs map[string]error) {
 
 		var rows [][]string
 		for k, v := range errs {
-			er := v.Error()
-			if len(er) > 60 {
-				er = er[:60]
-			}
+			er := limitLen(v.Error(), 60)
 			row := []string{tui.Bold(k), er}
 			rows = append(rows, row)
 		}
@@ -52,7 +50,7 @@ func PrintTableErrs(errs map[string]error) {
 func PrintTableTypoDomains(tdt domains.TypoList) {
 	if !tui.Effects() {
 		log.Info("Tui effects not available on this terminal.\n")
-		log.Info("%-20s | %-15s | %-35s | %-20s | %-25s | %-25s | %-25s\n", "DOMAIN NAME", "AVAILABILITY", "ALGORITHM", "MAIN DOMAIN", "REGISTRAR", "EXPIRY DATE", "UNICODE", "DATE CHECK")
+		log.Info("%-20s | %-15s | %-35s | %-20s | %-25s | %-25s | %-25s | %-20s\n", "DOMAIN NAME", "AVAILABILITY", "ALGORITHM", "MAIN DOMAIN", "REGISTRAR", "EXPIRY DATE", "UNICODE", "DATE CHECK")
 		for _, t := range tdt {
 			t.PrintShort()
 		}
@@ -78,7 +76,7 @@ func PrintTableTypoDomains(tdt domains.TypoList) {
 			p = idna.New()
 			nameUnicode, err := p.ToUnicode(td.Name)
 			if err != nil {
-				log.Error(err.Error())
+				log.Error("%s", err.Error())
 				nameUnicode = td.Name
 			}
 
@@ -106,12 +104,7 @@ func PrintTableTypoDomains(tdt domains.TypoList) {
 }
 
 func limitLen(s string, i int) string {
-	var result string
-	if len(s) > i {
-		result = s[:i-3]
-		result += "..."
-	}
-	return result
+	return format.LimitDisplayWidth(s, i)
 }
 
 func PrintChanges(changes changes.ChangeList) {
@@ -182,9 +175,9 @@ func PrintAverageWhoisStats(averages map[string]int) {
 
 	if !tui.Effects() {
 		log.Info("Tui effects not available on this terminal.\n")
-		log.Info("%-20s |%-20s | %-35s | %-35s |\n", "TLD", "AVERAGE TIME")
+		log.Info("%-20s | %-20s |\n", "TLD", "AVERAGE TIME")
 		for tld, aTime := range averages {
-			log.Info("%-35s | %-35s \n", tld, aTime)
+			log.Info("%-20s | %-20d |\n", tld, aTime)
 		}
 	} else {
 		columns := []string{
@@ -201,8 +194,8 @@ func PrintAverageWhoisStats(averages map[string]int) {
 	}
 
 	log.Debug("Table logs debug.\n")
-	log.Debug("%-20s |%-20s | %-35s | %-35s |\n", "TLD", "AVERAGE TIME")
+	log.Debug("%-20s | %-20s |\n", "TLD", "AVERAGE TIME")
 	for tld, aTime := range averages {
-		log.Debug("%-35s | %-35s \n", tld, aTime)
+		log.Debug("%-20s | %-20d |\n", tld, aTime)
 	}
 }

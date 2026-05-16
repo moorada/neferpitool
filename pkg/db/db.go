@@ -30,7 +30,7 @@ func InitDB(nameDB string) {
 func CloseDB() {
 	err := db.Close()
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	}
 }
 

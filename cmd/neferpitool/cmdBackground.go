@@ -67,7 +67,7 @@ func runCronJob(expression string) {
 func prepareAndSendReportEmail(expression string) {
 	err, reliableChangesReportToSend := db.GetRelaibleChangesFromDBWithExpression(expression)
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	}
 
 	conf := configuration.GetConf()
@@ -100,7 +100,7 @@ func prepareAndSendReportEmail(expression string) {
 
 		err := notification.EmailChanges(tpl, request)
 		if err != nil {
-			log.Error(err.Error())
+			log.Error("%s", err.Error())
 		} else {
 			log.Info("Report sent by email, Expression: %s", expression)
 		}
@@ -148,7 +148,7 @@ func prepareAndSendEmail() {
 
 		err := notification.EmailChanges(tpl, request)
 		if err != nil {
-			log.Error(err.Error())
+			log.Error("%s", err.Error())
 		} else {
 			log.Info("Changes sent by email")
 		}

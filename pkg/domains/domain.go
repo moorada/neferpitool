@@ -131,7 +131,7 @@ func (d Domain) GetExpiryDateString() string {
 	if w.Parsed.Registrar.ExpirationDate != "" {
 		expiration, err := format.StringToTime(w.Parsed.Registrar.ExpirationDate)
 		if err != nil {
-			log.Error(err.Error())
+			log.Error("%s", err.Error())
 		}
 		timeString = format.TimeToStringConsole(expiration)
 	}
@@ -141,7 +141,7 @@ func (d Domain) GetExpiryDateString() string {
 func (d Domain) GetExpiryDate() (expiryDate time.Time, err error) {
 	/*w, err := d.GetWhois()
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	}*/
 
 	w := d.Whois
@@ -149,7 +149,7 @@ func (d Domain) GetExpiryDate() (expiryDate time.Time, err error) {
 	if w.Parsed.Registrar.ExpirationDate != "" {
 		expiryDate, err = format.StringToTime(w.Parsed.Registrar.ExpirationDate)
 		if err != nil {
-			log.Error(err.Error())
+			log.Error("%s", err.Error())
 		}
 		return
 	} else {

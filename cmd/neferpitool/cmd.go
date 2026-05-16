@@ -2,7 +2,6 @@ package cmd
 
 //cmdroot
 import (
-	"bufio"
 	"flag"
 	"os"
 	"time"
@@ -10,18 +9,18 @@ import (
 	"github.com/briandowns/spinner"
 
 	"github.com/cheggaaa/pb/v3"
+	"github.com/moorada/neferpitool/pkg/app"
 
 	"github.com/moorada/neferpitool/pkg/configuration"
-	"github.com/moorada/neferpitool/pkg/scanner"
 
 	"github.com/moorada/neferpitool/pkg/console"
 	"github.com/moorada/neferpitool/pkg/db"
 	"github.com/moorada/neferpitool/pkg/domains"
-	"github.com/moorada/neferpitool/pkg/generator"
 	"github.com/moorada/neferpitool/pkg/log"
 )
 
 var totaltd int
+var monitorService = app.NewService()
 
 const PathConfigFolder = "./config"
 
@@ -36,7 +35,7 @@ func CmdRoot() {
 
 	err := os.MkdirAll(PathConfigFolder, os.ModePerm)
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	}
 
 	//init db
@@ -110,28 +109,26 @@ func CmdRoot() {
 }
 
 func presenceDomains(domains []string) {
-	ds := db.GetMainDomainListFromDB()
-	dsMap := map[string]bool{}
-
-	for _, d := range ds {
-		dsMap[d.Name] = true
-	}
-
+	presence := monitorService.DomainPresence(domains)
 	for _, s := range domains {
-
-		if _, ok := dsMap[s]; ok {
+		if presence[s] {
 			log.Info("%s present", s)
 		} else {
 			log.Info("%s NOT present", s)
 		}
-
 	}
 }
 
 func multipleDomainsMode(domains []string) {
 	for _, d := range domains {
-		addDomainAndHisTypos(d)
-		console.PrintTableTypoDomains(db.GetTypoDomainListFromDB(d))
+		tds, errs, err := addDomainAndHisTypos(d)
+		if err != nil {
+			log.Error("%s, error: %s", d, err.Error())
+		}
+		if len(errs) != 0 {
+			console.PrintTableErrs(errs)
+		}
+		console.PrintTableTypoDomains(tds)
 	}
 }
 
@@ -155,18 +152,10 @@ func logDegubInfo() {
 
 func UpdateTypoDomainsWithProgressBar(tds domains.TypoList) map[string]error {
 
-	c := make(chan int, len(tds))
 	bar := pb.Full.Start(len(tds))
-
-	var errs map[string]error
-	go func(map[string]error) {
-		errs = scanner.UpdateTypoDomains(tds, c)
-	}(errs)
-
-	for range tds {
-		<-c
-		bar.Increment()
-	}
+	errs := monitorService.ScanTypoDomains(tds, func(done, total int) {
+		bar.SetCurrent(int64(done))
+	})
 	bar.Finish()
 	if len(tds) > 0 {
 		log.Debug("Stats Scansion, Typodomains: %v, Errors: %v, Percentage of errors: %v", len(tds), len(errs), len(errs)*100/len(tds))
@@ -176,29 +165,20 @@ func UpdateTypoDomainsWithProgressBar(tds domains.TypoList) map[string]error {
 	return errs
 }
 
-func addDomainAndHisTypos(domain string) {
+func addDomainAndHisTypos(domain string) (domains.TypoList, map[string]error, error) {
 
 	s := spinner.New(spinner.CharSets[26], 200*time.Millisecond)
 	s.Prefix = "Generating typodomains "
 	s.Start()
-	tds := generator.GetUnfilledTypoDomains(domain)
+	tds, errs, err := monitorService.AddDomainAndTypos(domain, nil)
 	s.Stop()
-	errs := UpdateTypoDomainsWithProgressBar(tds)
-	if len(errs) != 0 {
-		console.PrintTableErrs(errs)
-	}
 
-	db.AddTypoListToDB(tds)
-	md := domains.NewLegitDomain(domain)
-
-	err := md.Update()
 	if err != nil {
-		log.Error("%s, error: %s", domain, err.Error())
+		return tds, errs, err
 	}
-
-	db.AddLegitDomainToDB(md)
 
 	log.Info("Typodomains added to database")
+	return tds, errs, nil
 
 }
 
@@ -208,41 +188,17 @@ func importTypos(domain string, path string) {
 	s.Prefix = "Importing typodomains "
 	s.Start()
 
-	var tds domains.TypoList
-
-	file, err := os.Open(path)
+	_, errs, err := monitorService.ImportTypos(domain, path, nil)
 	if err != nil {
-		log.Error("Importing typos from file, error: %s", domain, err.Error())
+		log.Error("Importing typos from file for %s, error: %s", domain, err.Error())
+		s.Stop()
+		return
 	}
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
-	var typos []string
-	for scanner.Scan() {
-		typos = append(typos, scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		log.Error("Importing typos from file, error: %s", domain, err.Error())
-	}
-
-	if len(typos) > 0 {
-		for _, t := range typos {
-			if t != "" {
-				td := domains.NewTypoDomain(t, domain, "imported")
-				tds = append(tds, td)
-			}
-		}
-	} else {
-		log.Error("Empty file, error: %s", domain, err.Error())
-	}
-
 	s.Stop()
 
-	errs := UpdateTypoDomainsWithProgressBar(tds)
 	if len(errs) != 0 {
 		console.PrintTableErrs(errs)
 	}
-
-	db.AddTypoListToDB(tds)
 
 	log.Info("Typodomains imported")
 

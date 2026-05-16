@@ -89,7 +89,7 @@ func MakeConfigFile() error {
 	}
 
 	if err != nil {
-		log.Error(err.Error())
+		log.Error("%s", err.Error())
 	} else {
 		log.Info("File \"config.json\" created")
 	}

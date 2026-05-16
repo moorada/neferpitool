@@ -36,7 +36,7 @@ func PrintWhoisStats() {
 				} else {
 					tMS := int(timeTD / time.Millisecond)
 					if err != nil {
-						log.Error(err.Error())
+						log.Error("%s", err.Error())
 					} else {
 						tld := getTLD(td.Name)
 						if data[tld] == nil {
