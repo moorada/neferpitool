@@ -1,8 +1,11 @@
 package console
 
 import (
+	"fmt"
+	"io"
 	"os"
 	"strconv"
+	"strings"
 
 	"golang.org/x/net/idna"
 
@@ -55,7 +58,6 @@ func PrintTableTypoDomains(tdt domains.TypoList) {
 			t.PrintShort()
 		}
 	} else {
-		// ASCII tables on the terminal
 		columns := []string{
 			"Idna",
 			"Status",
@@ -66,6 +68,7 @@ func PrintTableTypoDomains(tdt domains.TypoList) {
 			"Date check",
 			"Unicode",
 		}
+		widths := []int{26, 10, 30, 16, 28, 12, 16, 26}
 
 		var rows [][]string
 
@@ -82,7 +85,16 @@ func PrintTableTypoDomains(tdt domains.TypoList) {
 
 			w := td.GetWhois()
 			timeString := td.GetExpiryDateString()
-			row := []string{tui.Bold(td.Name), td.StatusToStringColored(), td.Algorithm, td.LegitDomain, limitLen(w.Parsed.Registrar.RegistrarName, 25), timeString, td.CreatedAt.Format("02/01/2006 15:04"), nameUnicode}
+			row := []string{
+				td.Name,
+				td.StatusToString(),
+				td.Algorithm,
+				td.LegitDomain,
+				limitLen(w.Parsed.Registrar.RegistrarName, widths[4]),
+				timeString,
+				td.CreatedAt.Format("02/01/2006 15:04"),
+				nameUnicode,
+			}
 
 			visibilityToShow := configuration.GetConf().SHOWSTATUS
 
@@ -92,7 +104,7 @@ func PrintTableTypoDomains(tdt domains.TypoList) {
 				}
 			}
 		}
-		tui.Table(os.Stdout, columns, rows)
+		printFixedWidthTable(os.Stdout, columns, widths, rows)
 	}
 
 	log.Debug("Table logs debug.\n")
@@ -105,6 +117,43 @@ func PrintTableTypoDomains(tdt domains.TypoList) {
 
 func limitLen(s string, i int) string {
 	return format.LimitDisplayWidth(s, i)
+}
+
+func printFixedWidthTable(w io.Writer, columns []string, widths []int, rows [][]string) {
+	if len(columns) == 0 || len(columns) != len(widths) {
+		return
+	}
+
+	printBorder := func(left, join, right string) {
+		fmt.Fprint(w, left)
+		for i, width := range widths {
+			fmt.Fprint(w, strings.Repeat("─", width+2))
+			if i < len(widths)-1 {
+				fmt.Fprint(w, join)
+			}
+		}
+		fmt.Fprintln(w, right)
+	}
+
+	printRow := func(values []string) {
+		fmt.Fprint(w, "│")
+		for i, width := range widths {
+			val := ""
+			if i < len(values) {
+				val = values[i]
+			}
+			fmt.Fprintf(w, " %s │", format.FitDisplayWidth(val, width))
+		}
+		fmt.Fprintln(w)
+	}
+
+	printBorder("┌", "┬", "┐")
+	printRow(columns)
+	printBorder("├", "┼", "┤")
+	for _, row := range rows {
+		printRow(row)
+	}
+	printBorder("└", "┴", "┘")
 }
 
 func PrintChanges(changes changes.ChangeList) {

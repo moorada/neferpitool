@@ -27,16 +27,17 @@ func EmailChanges(tpl TemplateData, req Request) (err error) {
 		err = req.parseTemplateString(tpl)
 	}
 	if err != nil {
-		log.Fatal("%s", err.Error())
-	} else {
-		ok, err := req.sendEmail()
-		if !ok {
-			log.Error("Error To sendEmail, %s\n, %s\n, %s", err.Error(), req.From, req.Password)
-		} else {
-			log.Debug("Email sent To %s, Subject: %s", req.To, req.Subject)
-		}
+		log.Error("Error to build email template: %s", err.Error())
+		return err
 	}
-	return
+
+	ok, err := req.sendEmail()
+	if !ok {
+		log.Error("Error To sendEmail, %s\n, %s\n, %s", err.Error(), req.From, req.Password)
+		return err
+	}
+	log.Debug("Email sent To %s, Subject: %s", req.To, req.Subject)
+	return nil
 }
 
 func EmailReport(tpl TemplateData, req Request) (err error) {
@@ -59,16 +60,17 @@ func EmailReport(tpl TemplateData, req Request) (err error) {
 		err = req.parseTemplateString(tpl)
 	}
 	if err != nil {
-		log.Fatal("%s", err.Error())
-	} else {
-		ok, err := req.sendEmail()
-		if !ok {
-			log.Error("Error To sendEmail, %s\n, %s\n, %s", err.Error(), req.From, req.Password)
-		} else {
-			log.Debug("Email sent To %s, Subject: %s", req.To, req.Subject)
-		}
+		log.Error("Error to build report template: %s", err.Error())
+		return err
 	}
-	return
+
+	ok, err := req.sendEmail()
+	if !ok {
+		log.Error("Error To sendEmail, %s\n, %s\n, %s", err.Error(), req.From, req.Password)
+		return err
+	}
+	log.Debug("Email sent To %s, Subject: %s", req.To, req.Subject)
+	return nil
 }
 
 func (r *Request) sendEmail() (bool, error) {
@@ -101,7 +103,7 @@ func (r *Request) parseTemplateString(data interface{}) error {
 
 	tmpl, err := template.New("test").Parse(templateString)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	buf := new(bytes.Buffer)
 	if err = tmpl.Execute(buf, data); err != nil {

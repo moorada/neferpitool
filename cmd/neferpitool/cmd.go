@@ -10,6 +10,7 @@ import (
 
 	"github.com/cheggaaa/pb/v3"
 	"github.com/moorada/neferpitool/pkg/app"
+	"github.com/moorada/neferpitool/pkg/webapp"
 
 	"github.com/moorada/neferpitool/pkg/configuration"
 
@@ -46,6 +47,8 @@ func CmdRoot() {
 	logs := flag.Bool("logs", false, "Avtive logs on file")
 	singleTd := flag.String("td", "", "Manage one typodomain")
 	bg := flag.Bool("bg", false, "Active monitoring in background")
+	webMode := flag.Bool("web", false, "Run Neferpitool web app")
+	webAddr := flag.String("web-addr", ":8080", "Web app listen address")
 	pd := flag.Bool("pd", false, "Check if domains are present")
 	makeConfig := flag.Bool("mc", false, "Make config file")
 	importTds := flag.String("it", "", "Import Typos from file - main domain")
@@ -65,6 +68,14 @@ func CmdRoot() {
 	}
 
 	logDegubInfo()
+
+	if *webMode {
+		server := webapp.NewServer()
+		if err := server.Start(*webAddr); err != nil {
+			log.Fatal("Web server error: %s", err.Error())
+		}
+		return
+	}
 
 	if *bg {
 		background()

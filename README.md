@@ -55,6 +55,29 @@ Run Neferpitool with the interactive prompt
 ./cmd
 
 ```
+
+Run Neferpitool Web Console
+
+```
+./cmd -web
+```
+
+Run Web Console on custom address/port
+
+```
+./cmd -web -web-addr :9090
+```
+
+Web Console notes
+
+```
+- dark UI with integrated logo (/logo.png)
+- domain management (add/import/remove/check)
+- typo history/update/delete
+- background scheduler controls (start/stop/run one cycle)
+- overview, stats, reliable changes, expiring domains
+- domain presence check from web UI
+```
 Menage one specific typodomain with the interactive prompt
 
 ```
@@ -67,6 +90,10 @@ Menage one specific typodomain with the interactive prompt
 ```
   -bg
     	Active monitoring in background
+  -web
+        Run Neferpitool web app
+  -web-addr string
+        Web app listen address (default ":8080")
   -it string -p string
     	Import Typos from file : -main domain -path of the file
   -logs

@@ -2,6 +2,7 @@ package log
 
 import (
 	"os"
+	"sync"
 	"time"
 
 	ll "github.com/moorada/log"
@@ -9,8 +10,15 @@ import (
 
 var pathDir = "logs"
 var pathFile = ""
+var consoleMu sync.Mutex
+var consoleEnabled bool
 
 func ActiveConsoleLog() (err error) {
+	consoleMu.Lock()
+	defer consoleMu.Unlock()
+	if consoleEnabled {
+		return nil
+	}
 
 	config := ll.FormatConfigBasic
 	config.Format = "{time} {level:color}{level:name}{reset} {message}"
@@ -18,11 +26,15 @@ func ActiveConsoleLog() (err error) {
 	if err != nil {
 		return err
 	}
+	consoleEnabled = true
 	return nil
 }
 
 func RemoveConsoleLog() {
+	consoleMu.Lock()
+	defer consoleMu.Unlock()
 	ll.RemoveOutput("")
+	consoleEnabled = false
 }
 
 func RemoveDebugLog() {

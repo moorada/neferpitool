@@ -38,6 +38,30 @@ func (s *Service) DomainPresence(domainNames []string) map[string]bool {
 	return presence
 }
 
+func (s *Service) ListDomains() domains.LegitList {
+	return db.GetMainDomainListFromDB()
+}
+
+func (s *Service) ListTypoDomains(domain string) domains.TypoList {
+	return db.GetTypoDomainListFromDB(domain)
+}
+
+func (s *Service) ListTypoDomainHistory(typoDomain string) domains.TypoList {
+	return db.GetTypoDomainHistoryFromDB(typoDomain)
+}
+
+func (s *Service) ListAllTypoDomains() domains.TypoList {
+	return db.GetAllTypoDomainListFromDB()
+}
+
+func (s *Service) RemoveDomain(domain string) {
+	db.RemoveLegitDomainFromDB(domain)
+}
+
+func (s *Service) RemoveTypoDomain(typoDomain string) {
+	db.RemoveTypoDomainFromDB(typoDomain)
+}
+
 func (s *Service) ScanTypoDomains(tds domains.TypoList, progress ProgressFn) map[string]error {
 	c := make(chan int, len(tds))
 	errsCh := make(chan map[string]error, 1)
@@ -103,6 +127,45 @@ func (s *Service) ImportTypos(domain, path string, progress ProgressFn) (domains
 	return tds, errs, nil
 }
 
+func (s *Service) ImportTyposFromLines(domain string, typoLines []string, progress ProgressFn) (domains.TypoList, map[string]error, error) {
+	var tds domains.TypoList
+	for _, line := range typoLines {
+		name := strings.TrimSpace(line)
+		if name == "" {
+			continue
+		}
+		tds = append(tds, domains.NewTypoDomain(name, domain, "imported"))
+	}
+
+	if len(tds) == 0 {
+		return nil, nil, errors.New("empty typodomain list")
+	}
+
+	errs := s.ScanTypoDomains(tds, progress)
+	db.AddTypoListToDB(tds)
+	return tds, errs, nil
+}
+
+func (s *Service) UpdateTypoDomain(typoDomain string) (domains.TypoDomain, error) {
+	td := db.GetTypoDomainFromDB(typoDomain)
+	if td.Name == "" {
+		return domains.TypoDomain{}, errors.New("typodomain not found")
+	}
+
+	tdNew := domains.NewTypoDomain(td.Name, td.LegitDomain, td.Algorithm)
+	if err := tdNew.UpdateStatus(); err != nil {
+		return domains.TypoDomain{}, err
+	}
+	if tdNew.Status == constants.INACTIVE || tdNew.Status == constants.ACTIVE {
+		if err := tdNew.UpdateWhois(); err != nil {
+			return domains.TypoDomain{}, err
+		}
+	}
+
+	db.AddTypoDomainToDB(tdNew)
+	return tdNew, nil
+}
+
 func (s *Service) GetTypoDomainsInExpiration() domains.TypoList {
 	var total domains.TypoList
 	expirationDays := configuration.GetConf().EXPIRATIONTIME
@@ -130,6 +193,37 @@ func (s *Service) IterateCheckGetChanges(tds domains.TypoList, progress Progress
 	}
 
 	return tdsReliable, changesReliable, scanErrs
+}
+
+func (s *Service) CheckChangesForTypoList(tds domains.TypoList, progress ProgressFn) (changes.ChangeList, map[string]error) {
+	tdsReliable, changesReliable, scanErrs := s.IterateCheckGetChanges(tds, progress)
+	if len(changesReliable) > 0 {
+		s.SaveReliableChanges(changesReliable)
+		db.AddTypoListToDB(tdsReliable)
+	}
+	return changesReliable, scanErrs
+}
+
+func (s *Service) CheckChangesForDomain(domain string, progress ProgressFn) (changes.ChangeList, map[string]error) {
+	return s.CheckChangesForTypoList(db.GetTypoDomainListFromDB(domain), progress)
+}
+
+func (s *Service) CheckChangesForAll(progress ProgressFn) (changes.ChangeList, map[string]error) {
+	var allChanges changes.ChangeList
+	allErrs := map[string]error{}
+
+	for _, d := range db.GetMainDomainListFromDB() {
+		domainChanges, errs := s.CheckChangesForDomain(d.Name, progress)
+		allChanges = append(allChanges, domainChanges...)
+		allErrs = mergeErrs(allErrs, errs)
+	}
+
+	return allChanges, allErrs
+}
+
+func (s *Service) ListReliableChanges() (reliableChanges.ReliableChangeList, error) {
+	err, changesList := db.GetRelaibleChangesFromDB()
+	return changesList, err
 }
 
 func (s *Service) SaveReliableChanges(changesList changes.ChangeList) {

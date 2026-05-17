@@ -1,6 +1,8 @@
 package domains
 
 import (
+	"strings"
+
 	"golang.org/x/net/idna"
 
 	"github.com/moorada/neferpitool/pkg/constants"
@@ -62,8 +64,17 @@ func (td TypoDomain) PrintShort() {
 		log.Error("%s", err.Error())
 		nameUnicode = td.Name
 	}
-	registrar := format.LimitDisplayWidth(w.Parsed.Registrar.RegistrarName, 25)
-	log.Info("%-20s |%-15s | %-15s | %-20s | %-25s | %-20s | %-25s | %-20s", td.Name, td.StatusToString(), td.Algorithm, td.LegitDomain, registrar, timeString, nameUnicode, td.CreatedAt.Format("02/01/2006 15:04"))
+	columns := []string{
+		format.FitDisplayWidth(td.Name, 20),
+		format.FitDisplayWidth(td.StatusToString(), 15),
+		format.FitDisplayWidth(td.Algorithm, 15),
+		format.FitDisplayWidth(td.LegitDomain, 20),
+		format.FitDisplayWidth(w.Parsed.Registrar.RegistrarName, 25),
+		format.FitDisplayWidth(timeString, 20),
+		format.FitDisplayWidth(nameUnicode, 25),
+		format.FitDisplayWidth(td.CreatedAt.Format("02/01/2006 15:04"), 20),
+	}
+	log.Info("%s", strings.Join(columns, " | "))
 	//}
 
 }
@@ -91,8 +102,17 @@ func (td TypoDomain) PrintShortDebug() {
 		log.Error("%s", err.Error())
 		nameUnicode = td.Name
 	}
-	registrar := format.LimitDisplayWidth(w.Parsed.Registrar.RegistrarName, 25)
-	log.Debug("%-20s |%-15s | %-15s | %-20s | %-25s | %-20s | %-25s | %-20s", td.Name, td.StatusToString(), td.Algorithm, td.LegitDomain, registrar, timeString, nameUnicode, td.CreatedAt.Format("02/01/2006 15:04"))
+	columns := []string{
+		format.FitDisplayWidth(td.Name, 20),
+		format.FitDisplayWidth(td.StatusToString(), 15),
+		format.FitDisplayWidth(td.Algorithm, 15),
+		format.FitDisplayWidth(td.LegitDomain, 20),
+		format.FitDisplayWidth(w.Parsed.Registrar.RegistrarName, 25),
+		format.FitDisplayWidth(timeString, 20),
+		format.FitDisplayWidth(nameUnicode, 25),
+		format.FitDisplayWidth(td.CreatedAt.Format("02/01/2006 15:04"), 20),
+	}
+	log.Debug("%s", strings.Join(columns, " | "))
 	//}
 
 }

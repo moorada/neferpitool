@@ -27,3 +27,11 @@ func LimitDisplayWidth(s string, width int) string {
 
 	return runewidth.Truncate(clean, width, tail)
 }
+
+func FitDisplayWidth(s string, width int) string {
+	if width <= 0 {
+		return ""
+	}
+
+	return runewidth.FillRight(LimitDisplayWidth(s, width), width)
+}
